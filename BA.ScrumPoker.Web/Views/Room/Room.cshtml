@@ -1,0 +1,59 @@
+﻿
+@model BA.ScrumPoker.Web.Models.RoomModel
+
+<br />
+
+<h1>Room id: @Model.RoomId</h1>
+
+@if (Model.CanVote)
+{
+    <a class="btn btn-lg btn-danger" href="@Url.Action("StopVoting", "Room", new { roomId = Model.RoomId })">Stop Voting</a>
+
+}
+else
+{
+    <a class="btn btn-lg btn-success" href="@Url.Action("StartVoting", "Room", new { roomId = Model.RoomId })">Start Voting</a>
+}
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Estimation
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tableBody">
+       @foreach(var user in Model.Clients)
+       {
+           <tr>
+               <td>@user.UserName</td>
+               <td>
+                   @if (Model.CanVote)
+                   {
+                       <span>-</span>
+                   }
+                   else
+                   {
+                       <span>@user.Estimation</span>
+                   }
+               </td>
+           </tr>
+       }
+    </tbody>
+</table>
+
+@section scripts{
+    <script>
+        $(function () {
+            setTimeout(function () {
+                window.location = '@Url.Action("Room", "Room", new { roomId = Model.RoomId })';
+            }, 3000)
+        })
+    </script>    
+}

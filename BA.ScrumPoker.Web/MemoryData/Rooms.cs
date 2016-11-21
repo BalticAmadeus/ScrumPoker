@@ -1,0 +1,142 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using BA.ScrumPoker.Web.Models;
+
+namespace BA.ScrumPoker.Web.MemoryData
+{
+    public static class Rooms
+    {
+
+        private static List<RoomModel> AvailableRooms { get; set; }
+
+        private static void Init()
+        {
+            if (AvailableRooms == null)
+                AvailableRooms = new List<RoomModel>();
+
+        }
+
+        public static List<RoomModel> GetRooms()
+        {
+            Init();
+            return AvailableRooms;
+        }
+
+        private static int GetUniqueRoomId()
+        {
+            Random rd = new Random();
+            var roomNumber = rd.Next(9999);
+
+            if (Rooms.GetRooms().Any(x => x.RoomId == roomNumber))
+                return GetUniqueRoomId();
+
+            return roomNumber;
+
+        }
+
+        public static RoomModel AddRoom()
+        {
+            Init();
+
+            var newRoom = new RoomModel
+            {
+                RoomId = GetUniqueRoomId(),
+                Clients = new List<ClientModel>()
+            };
+
+            AvailableRooms.Add(newRoom);
+
+
+            return newRoom;
+        }
+
+        public static RoomModel GetRoom(RoomModel model)
+        {
+            Init();
+
+            var room = AvailableRooms.FirstOrDefault(x => x.RoomId == model.RoomId);
+            return room;
+        }
+
+        public static RoomModel StartVoting(RoomModel room)
+        {
+            room = Rooms.GetRoom(room);
+            room.StartVoting();
+            return room;
+        }
+
+        public static RoomModel StopVoting(RoomModel room)
+        {
+            room = Rooms.GetRoom(room);
+            room.StopVoting();
+            return room;
+        }
+
+        public static RoomModel JoinRoom(ClientModel model)
+        {
+            Init();
+
+            var room = AvailableRooms.FirstOrDefault(x => x.RoomId == model.RoomId);
+            if (room == null)
+                return null;
+
+            Random rd = new Random();
+            model.UserId = rd.Next(9999);
+            room.Clients.Add(model);
+
+            return room;
+        }
+
+        public static RoomModel RemoveUser(ClientModel model)
+        {
+            Init();
+
+            var room = AvailableRooms.FirstOrDefault(x => x.RoomId == model.RoomId);
+            if (room == null)
+                return null;
+
+            room.Clients.Remove(model);
+            return room;
+        }
+
+        public static void Vote(ClientModel model)
+        {
+            Init();
+
+            var room = AvailableRooms.FirstOrDefault(x => x.RoomId == model.RoomId);
+            if (room == null)
+                return;
+
+            var user = room.Clients.FirstOrDefault(x => x.UserId == model.UserId);
+            if (user == null)
+                return;
+
+            user.Estimation = model.Estimation;
+
+        }
+
+        public static bool CanVote(ClientModel model)
+        {
+            Init();
+
+            var room = AvailableRooms.FirstOrDefault(x => x.RoomId == model.RoomId);
+            if (room == null)
+                return false;
+
+            return room.CanVote;
+        }
+
+        //public static void CanVote(ClientModel model)
+        //{
+        //	Init();
+
+        //	var room = AvailableRooms.FirstOrDefault(x => x.RoomId == model.RoomId);
+        //	if (room == null)
+        //		return false;
+
+        //	return room.CanVote;
+        //}
+    }
+}
