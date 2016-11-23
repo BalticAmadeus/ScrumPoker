@@ -1,0 +1,124 @@
+﻿body {
+	background-color:#eeeeee;
+}
+
+.client-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	text-align:center;
+}
+
+	.client-list li {
+		margin: 10px;
+		display: inline-block;
+		width: 19%;
+	}
+
+.room-number {
+	text-align:center;
+	font-size: 40px;
+	color: black;
+}
+
+.hard-header {
+	font-size: 40px;
+	text-align: center;
+	color: rgb(175,175,175);
+	margin-top: 10px;
+	margin-bottom: 5px;
+	word-break: break-all;
+}
+.actions{
+	
+}
+
+.actions button{
+	width:300px;
+	height:50px;
+	font-size:20px;
+}
+
+.voted {
+	color: forestgreen;
+}
+
+
+
+.flip {
+	height: 215px;
+	width: 100%;
+	-webkit-perspective: 800px;
+	position: relative;
+}
+
+	.flip .card.flipped {
+		-webkit-transform: rotateY(-180deg);
+	}
+
+	.flip .card {
+		width: 100%;
+		height: 100%;
+		-webkit-transform-style: preserve-3d;
+		-webkit-transition: 0.5s;
+
+		border:3px solid rgb(70, 99, 157);
+		border-radius:5px;
+	}
+
+		.flip .card .face {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			-webkit-backface-visibility: hidden;
+			z-index: 2;
+			font-family: Georgia;
+			font-size: 3em;
+			text-align: center;
+			line-height: 200px;
+		}
+
+		.flip .card .front {
+			position: absolute;
+			z-index: 1;
+			color: rgb(70, 99, 157);
+			cursor: pointer;
+			text-align: center;
+			vertical-align: middle;
+			height: 100%;
+			width: 100%;
+			font-size: 100px;
+
+
+		}
+
+		.flip .card .back {
+			-webkit-transform: rotateY(-180deg);
+			cursor: pointer;
+			border-radius: 5px;
+			background-image: url(../Content/Images/ba-transparent.png);
+			background-repeat: no-repeat;
+			background-size: contain;
+			width: 99%;
+			height: 100%;
+		}
+
+		.flip .card .front.selectedCard{
+			background-color:black;
+		}
+
+		@media only screen and (max-width: 900px) {
+			.client-list li{
+				width:32% !important;
+			}
+		}
+
+		@media only screen and (max-width: 600px) {
+			.client-list li{
+				width:45% !important;
+			}
+		}
+
+		.ng-hide{
+			display:none;
+		}

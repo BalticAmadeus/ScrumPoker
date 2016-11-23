@@ -1,0 +1,38 @@
+﻿@section scripts
+{
+	@Scripts.Render("~/bundles/angular")
+
+	<script type="text/javascript" src="~/Scripts/Modules/VotingController.js"></script>
+}
+@section HeaderScripts
+{
+	@Styles.Render("~/Voting/css")
+}
+
+<div ng-app="ScrumPoker">
+
+	<div id="voting-view" ng-controller="VotingController" as ctrl>
+		<div class="ng-hide" ng-show="dataLoaded">
+			<div class="room-number">
+				Room number: {{ViewModel.Client.RoomId}}
+			</div>
+
+			<ul class="client-list">
+				<li ng-repeat="selection in ViewModel.VotingConfiguration.Selection" ng-click="SetMyVote(selection.Number)">
+					<div class="flip">
+						<div class="card" ng-class="{'flipped':!ViewModel.CanIVote}">
+							<div class="face front" ng-class="{'selectedCard': selection.Number == ViewModel.Client.VoteValue}">
+								{{selection.Number}}
+							</div>
+							<div class="face back">
+							</div>
+						</div>
+					</div>
+				</li>
+
+
+			</ul>
+		</div>
+	</div>
+</div>
+

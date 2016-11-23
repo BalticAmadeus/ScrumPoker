@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartup(typeof(BA.ScrumPoker.Web.Startup))]
+[assembly: OwinStartup(typeof(BA.ScrumPoker.Startup))]
 
-namespace BA.ScrumPoker.Web
+namespace BA.ScrumPoker
 {
-    public partial class Startup
-    {
-        public void Configuration(IAppBuilder app)
-        {
-            ConfigureAuth(app);
-        }
-    }
+	public class Startup
+	{
+		public void Configuration(IAppBuilder app)
+		{
+			app.MapSignalR();
+		}
+	}
 }

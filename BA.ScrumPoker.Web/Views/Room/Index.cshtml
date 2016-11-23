@@ -1,0 +1,45 @@
+﻿@section scripts
+{
+	@Scripts.Render("~/bundles/angular")
+
+	<script type="text/javascript" src="~/Scripts/Modules/RoomController.js"></script>
+}
+@section HeaderScripts
+{
+	@Styles.Render("~/Room/css")
+}
+
+<div ng-app="ScrumPoker">
+
+	<div id="room-view" ng-controller="RoomController" as ctrl>
+		<div class="ng-hide" ng-show="dataLoaded">
+			<div class="room-number">
+				Room number: {{ViewModel.RoomId}}
+			</div>
+
+			<ul class="client-list">
+				<li ng-repeat="cn in connected">
+
+					{{cn}}
+				</li>
+			</ul>
+
+			<ul class="client-list">
+				<li ng-repeat="client in ViewModel.Clients">
+
+					<div class="hard-header" ng-class="{'voted':client.IHaveVoted}">{{client.Name}}</div>
+
+					<div class="flip">
+						<div class="card" ng-class="{'flipped':!isFlipped}" ng-click="flipMe(!isFlipped)">
+							<div class="face front">
+								{{client.VoteValue}}
+							</div>
+							<div class="face back">
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

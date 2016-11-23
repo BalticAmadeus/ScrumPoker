@@ -1,0 +1,1 @@
+﻿var ScrumPoker = angular.module('ScrumPoker', ['angular-loading-bar']);

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using BA.ScrumPoker.Web.Models;
+using BA.ScrumPoker.Models;
 
-namespace BA.ScrumPoker.Web.MemoryData
+namespace BA.ScrumPoker.MemoryData
 {
     public static class Rooms
     {
@@ -83,7 +83,7 @@ namespace BA.ScrumPoker.Web.MemoryData
                 return null;
 
             Random rd = new Random();
-            model.UserId = rd.Next(9999);
+            model.Id = rd.Next(9999);
             room.Clients.Add(model);
 
             return room;
@@ -109,11 +109,11 @@ namespace BA.ScrumPoker.Web.MemoryData
             if (room == null)
                 return;
 
-            var user = room.Clients.FirstOrDefault(x => x.UserId == model.UserId);
+            var user = room.Clients.FirstOrDefault(x => x.Id == model.Id);
             if (user == null)
                 return;
 
-            user.Estimation = model.Estimation;
+            user.VoteValue = model.VoteValue;
 
         }
 
@@ -128,15 +128,10 @@ namespace BA.ScrumPoker.Web.MemoryData
             return room.CanVote;
         }
 
-        //public static void CanVote(ClientModel model)
-        //{
-        //	Init();
-
-        //	var room = AvailableRooms.FirstOrDefault(x => x.RoomId == model.RoomId);
-        //	if (room == null)
-        //		return false;
-
-        //	return room.CanVote;
-        //}
+        public static ClientModel GetClient(int clientId)
+        {
+            var user = AvailableRooms.SelectMany(x => x.Clients).SingleOrDefault(x => x.Id == clientId);
+            return user;
+        }
     }
 }

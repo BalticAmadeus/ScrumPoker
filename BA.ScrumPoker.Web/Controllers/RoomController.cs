@@ -1,71 +1,116 @@
-﻿using BA.ScrumPoker.Web.MemoryData;
-using BA.ScrumPoker.Web.Models;
+﻿using BA.ScrumPoker.Infrasturcture;
+using BA.ScrumPoker.MemoryData;
+using BA.ScrumPoker.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace BA.ScrumPoker.Web.Controllers
+namespace BA.ScrumPoker.Controllers
 {
     public class RoomController : Controller
     {
-        public ActionResult CreateRoom()
+        // GET: Room
+        public ActionResult Index(int id)
         {
-            var room = Rooms.AddRoom(); ;
-            return RedirectToAction("Room", new { roomId = room .RoomId});
+            return View();
         }
 
-        public ActionResult Room(int roomId)
-        {
-            var model = Rooms.GetRoom(new RoomModel { RoomId = roomId });
-            
-            return View(model);
-        }
+		public JsonResult Get()
+		{
+			var paramValue = Request.UrlReferrer.Segments[Request.UrlReferrer.Segments.Length - 1];
 
-        [HttpPost]
-        public ActionResult Vote(ClientModel model)
-        {
-            var canVote = Rooms.CanVote(model);
-            if (!canVote)
-            {
-                ModelState.AddModelError("Error", "Voting has not started yet!");
-                model.Estimation = 0;
-                return View("~/Views/Mobile/Room.cshtml", model);
-            }
-            Rooms.Vote(model);
-            return View("~/Views/Mobile/Room.cshtml", model);
-        }
-                
-        public JsonResult GetRoom(RoomModel model)
-        {
+			Int32 roomId;
+			if (!Int32.TryParse(paramValue, out roomId))
+			{
+				return new JsonResult()
+				{
+					JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+					Data = new UiResponse<string>("Incorrect room Id")
+				};
+			}
 
-            var room = Rooms.GetRoom(model);
-            if (room == null)
-                return new JsonResult()
-                {
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                    Data = null
-                };
+            var room = Rooms.GetRoom(new RoomModel { RoomId = roomId });
+			if(room == null)
+			{
+				return new JsonResult()
+				{
+					JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+					Data = new UiResponse<string>("Room not found")
+				};
+			}
 
-            return new JsonResult()
-            {
-                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                Data = room
-            };
-        }
-       
-        public ActionResult StopVoting(int roomId)
-        {
-            var room = Rooms.StopVoting(new RoomModel { RoomId = roomId });
-            return View("Room", room);
-        }
-        
-        public ActionResult StartVoting(int roomId)
-        {
-            var room = Rooms.StartVoting(new RoomModel { RoomId = roomId });
-            return View("Room", room);
-        }       
+			return new JsonResult()
+			{
+				JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+				Data = new UiResponse<RoomModel>(room)
+			};
+		}
 
-    }
+		public JsonResult StartVoting(RoomModel model)
+		{
+			var paramValue = Request.UrlReferrer.Segments[Request.UrlReferrer.Segments.Length - 1];
+
+			var room = Rooms.StartVoting(model);
+			if (room == null)
+			{
+				return new JsonResult()
+				{
+					JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+					Data = new UiResponse<string>("Failed to start voting")
+				};
+			}
+
+			return new JsonResult()
+			{
+				JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+				Data = new UiResponse<RoomModel>(room)
+			};
+		}
+
+		public JsonResult GetClients(int roomId)
+		{
+			var paramValue = Request.UrlReferrer.Segments[Request.UrlReferrer.Segments.Length - 1];
+
+			var room = Rooms.GetRoom(new RoomModel { RoomId = roomId });
+			if (room == null)
+			{
+				return new JsonResult()
+				{
+					JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+					Data = new UiResponse<string>("Room not found")
+				};
+			}
+
+			return new JsonResult()
+			{
+				JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+				Data = new UiResponse<List<ClientModel>>(room.Clients)
+			};
+		}
+
+		
+
+		public JsonResult StopVoting(RoomModel model)
+		{
+			var paramValue = Request.UrlReferrer.Segments[Request.UrlReferrer.Segments.Length - 1];
+
+			var room = Rooms.StopVoting(model);
+			if (room == null)
+			{
+				return new JsonResult()
+				{
+					JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+					Data = new UiResponse<string>("Room not found")
+				};
+			}
+
+			return new JsonResult()
+			{
+				JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+				Data = new UiResponse<RoomModel>(room)
+			};
+		}
+	}
 }

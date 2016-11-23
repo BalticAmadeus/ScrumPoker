@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace BA.ScrumPoker.Web.Models
+namespace BA.ScrumPoker.Models
 {
     public class RoomModel
     {
@@ -13,7 +13,7 @@ namespace BA.ScrumPoker.Web.Models
 
         public void StartVoting()
         {
-            Clients.ForEach(c => c.Estimation = 0);
+            Clients.ForEach(c => c.VoteValue = 0);
             CanVote = true;
         }
 

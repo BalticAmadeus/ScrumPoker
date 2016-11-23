@@ -1,11 +1,37 @@
-﻿<div class="jumbotron">
-    <h1>Scrum poker</h1>   
+﻿@{
+	ViewBag.Title = "Home Page";
+}
+
+<div class="home-view">
+	<div class="create-room">
+		<h1>
+			Create you own room
+		</h1>
+		@using (Html.BeginForm("CreateRoom", "Home", FormMethod.Post))
+			{
+			<button type="submit" class="btn btn-primary btn-lg">Create Room &raquo;</button>
+			}
+	</div>
+	<div class="join-room">
+		<h1>
+			Join existing room
+		</h1>
+		@using (Html.BeginForm("Join", "Home", FormMethod.Post))
+			{
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary btn-lg">Join Room &raquo;</button>
+			</div>
+			<div>
+				<input type="text" name="userName" placeholder="User Name" required />
+			</div>
+			<div>
+				<input type="text" name="roomId" placeholder="Room Number" required />
+			</div>
+			
+		}
+	</div>
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <a href="@Url.Action("CreateRoom", "Room")" class="btn btn-primary btn-lg">Create room</a>
-    </div>
-    <div class="col-md-4">
-        <a href="@Url.Action("Connect", "Mobile")" class="btn btn-success btn-lg">Join room</a>
-    </div>
-</div>
+
+
+
+

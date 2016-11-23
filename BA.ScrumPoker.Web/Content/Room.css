@@ -1,0 +1,145 @@
+﻿body {
+	background-color:#eeeeee;
+}
+
+.client-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	text-align:center;
+}
+
+	.client-list li {
+		margin: 10px;
+		display: inline-block;
+		width: 24%;
+	}
+
+.room-number {
+	text-align:center;
+	font-size: 40px;
+	color: rgb(70, 99, 157);
+}
+
+.hard-header {
+	font-size: 40px;
+	text-align: center;
+	color: rgb(175,175,175);
+	margin-top: 10px;
+	margin-bottom: 5px;
+	word-break: break-all;
+}
+.actions{
+	
+}
+
+.actions button{
+	width:300px;
+	height:50px;
+	font-size:20px;
+}
+
+.voted {
+	color: forestgreen;
+}
+
+
+
+.flip {
+	height: 273px;
+	width: 100%;
+	-webkit-perspective: 800px;
+	position: relative;
+}
+
+	.flip .card.flipped {
+		-webkit-transform: rotateY(-180deg);
+	}
+
+	.flip .card {
+		width: 100%;
+		height: 100%;
+		-webkit-transform-style: preserve-3d;
+		-webkit-transition: 1s;
+
+		border:3px solid rgb(70, 99, 157);
+		border-radius:5px;
+
+		
+	}
+
+		.flip .card .face {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			-webkit-backface-visibility: hidden;
+			z-index: 2;
+			font-family: Georgia;
+			font-size: 3em;
+			text-align: center;
+			line-height: 200px;
+		}
+
+		.flip .card .front {
+			
+			position: absolute;
+			z-index: 1;
+			color: rgb(70, 99, 157);
+			cursor: pointer;
+			border-radius: 5px;
+			text-align: left;
+			vertical-align: baseline;
+			height: 100%;
+			width: 100%;
+			font-size: 90px;
+			padding-top: 0px;
+			background-repeat: no-repeat;
+			background-size: contain;
+
+			text-align:center;
+			padding-top:15px;
+		}
+
+		.kam{
+			background-image: url(~/Content/Images/Images/Faces/2.png);
+		}
+		.sus{
+			background-image: url(~/Content/Images/Images/Faces/1.png);
+		}
+
+		.pec{
+			background-image: url(~/Content/Images/Images/Faces/4.png);
+		}
+
+		.kav{
+			background-image: url(~/Content/Images/Images/Faces/3.png);
+		}
+
+		.value-presenter{
+			position:absolute;
+			top:-75px;
+		}
+
+		.flip .card .back {
+			-webkit-transform: rotateY(-180deg);
+			cursor: pointer;
+			border-radius: 5px;
+			background-image: url(../Content/Images/ba-transparent.png);
+			background-repeat: no-repeat;
+			background-size: cover;
+			width: 99%;
+			height: 100%;
+		}
+
+
+		.overlay{
+			position:fixed;
+			width:100%;
+			height:100%;
+			z-index:99;
+			background-color:#eeeeee;
+		}
+
+		.ng-hide{
+			display:none;
+		}
