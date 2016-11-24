@@ -40,7 +40,7 @@ ScrumPoker.controller('VotingController', ['$scope', '$http', '$filter', "$timeo
 
 		$scope.ViewModel.Client.VoteValue = number;
 
-		$http.post('/Voting/Vote', { model: $scope.ViewModel.Client }).success(function (response) {
+		$http.post('Voting/Vote', { model: $scope.ViewModel.Client }).success(function (response) {
 			if ($scope.ifServiceCallFailed(response))
 				return;
 
@@ -71,7 +71,7 @@ ScrumPoker.controller('VotingController', ['$scope', '$http', '$filter', "$timeo
 	}
 
 	$scope.UpdateClientRequest = function(){
-		$http.post('/Voting/GetUpdates', { model: $scope.ViewModel.Client }).success(function (response) {
+		$http.post('Voting/GetUpdates', { model: $scope.ViewModel.Client }).success(function (response) {
 			if ($scope.ifServiceCallFailed(response))
 			{
 				$scope.UpdateClient();
@@ -104,7 +104,7 @@ ScrumPoker.controller('VotingController', ['$scope', '$http', '$filter', "$timeo
 ScrumPoker.factory('VotingService', ['$http', 'RoomId', function ($http, roomId) {
 	var VotingService = {};
 	VotingService.getVotingData = function () {
-		return $http.get('/Voting/Get/' + roomId);
+		return $http.get('Voting/Get/' + roomId);
 	};
 	return VotingService;
 

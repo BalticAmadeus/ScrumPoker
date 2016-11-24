@@ -43,7 +43,7 @@ ScrumPoker.controller('RoomController', ['$scope', '$http', '$filter', "$timeout
 	}
 
 	$scope.StartVoting = function () {
-		$http.post('/Room/StartVoting', { model: $scope.ViewModel }).success(function (response) {
+		$http.post('Room/StartVoting', { model: $scope.ViewModel }).success(function (response) {
 			$scope.ViewModel = response.Data;
 			
 		})
@@ -70,7 +70,7 @@ ScrumPoker.controller('RoomController', ['$scope', '$http', '$filter', "$timeout
 	}
 
 	$scope.StopVoting = function () {
-		$http.post('/Room/StopVoting', { model: $scope.ViewModel }).success(function (response) {
+		$http.post('Room/StopVoting', { model: $scope.ViewModel }).success(function (response) {
 			$scope.ViewModel = response.Data;
 
 
@@ -100,7 +100,7 @@ ScrumPoker.controller('RoomController', ['$scope', '$http', '$filter', "$timeout
 	}
 
 	$scope.UpdateClientsRequest =function(){
-		$http.post('/Room/GetClients', { roomId: $scope.ViewModel.RoomId }).success(function (response) {
+		$http.post('Room/GetClients', { roomId: $scope.ViewModel.RoomId }).success(function (response) {
 			for (var i = 0 ; i < response.Data.length; i++) {
 				var inArray = findOrUpdate(response.Data[i]);
 				if (!inArray)
@@ -136,7 +136,7 @@ ScrumPoker.controller('RoomController', ['$scope', '$http', '$filter', "$timeout
 ScrumPoker.factory('RoomService', ['$http', 'RoomId', function ($http, roomId) {
 	var RoomService = {};
 	RoomService.getRoomData = function () {
-		return $http.get('/Room/Get/' + roomId);
+		return $http.get('Room/Get/' + roomId);
 	};
 	return RoomService;
 
