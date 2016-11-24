@@ -1,7 +1,9 @@
 ﻿@section scripts
 {
 	@Scripts.Render("~/bundles/angular")
-
+    <script>
+            ScrumPoker.value('RoomId', @ViewBag.RoomId);
+    </script>
 	<script type="text/javascript" src="~/Scripts/Modules/VotingController.js"></script>
 }
 @section HeaderScripts

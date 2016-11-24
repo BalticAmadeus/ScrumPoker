@@ -14,24 +14,13 @@ namespace BA.ScrumPoker.Controllers
         // GET: Room
         public ActionResult Index(int id)
         {
+            ViewBag.RoomId = id;
             return View();
         }
 
-		public JsonResult Get()
+		public JsonResult Get(int id)
 		{
-			var paramValue = Request.UrlReferrer.Segments[Request.UrlReferrer.Segments.Length - 1];
-
-			Int32 roomId;
-			if (!Int32.TryParse(paramValue, out roomId))
-			{
-				return new JsonResult()
-				{
-					JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-					Data = new UiResponse<string>("Incorrect room Id")
-				};
-			}
-
-            var room = Rooms.GetRoom(new RoomModel { RoomId = roomId });
+            var room = Rooms.GetRoom(new RoomModel { RoomId = id });
 			if(room == null)
 			{
 				return new JsonResult()
@@ -50,8 +39,6 @@ namespace BA.ScrumPoker.Controllers
 
 		public JsonResult StartVoting(RoomModel model)
 		{
-			var paramValue = Request.UrlReferrer.Segments[Request.UrlReferrer.Segments.Length - 1];
-
 			var room = Rooms.StartVoting(model);
 			if (room == null)
 			{
@@ -71,8 +58,6 @@ namespace BA.ScrumPoker.Controllers
 
 		public JsonResult GetClients(int roomId)
 		{
-			var paramValue = Request.UrlReferrer.Segments[Request.UrlReferrer.Segments.Length - 1];
-
 			var room = Rooms.GetRoom(new RoomModel { RoomId = roomId });
 			if (room == null)
 			{
@@ -94,8 +79,6 @@ namespace BA.ScrumPoker.Controllers
 
 		public JsonResult StopVoting(RoomModel model)
 		{
-			var paramValue = Request.UrlReferrer.Segments[Request.UrlReferrer.Segments.Length - 1];
-
 			var room = Rooms.StopVoting(model);
 			if (room == null)
 			{

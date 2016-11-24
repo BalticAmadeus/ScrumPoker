@@ -133,10 +133,10 @@ ScrumPoker.controller('RoomController', ['$scope', '$http', '$filter', "$timeout
 
 
 
-ScrumPoker.factory('RoomService', ['$http', '$sce', function ($http, $sce) {
+ScrumPoker.factory('RoomService', ['$http', 'RoomId', function ($http, roomId) {
 	var RoomService = {};
 	RoomService.getRoomData = function () {
-		return $http.get('/Room/Get');
+		return $http.get('/Room/Get/' + roomId);
 	};
 	return RoomService;
 

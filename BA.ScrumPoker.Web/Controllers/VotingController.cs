@@ -14,25 +14,14 @@ namespace BA.ScrumPoker.Controllers
 		// GET: Voting
 		public ActionResult Index(int id)
 		{
-			return View();
+            ViewBag.RoomId = id;
+            return View();
 		}
 
 
-		public JsonResult Get()
+		public JsonResult Get(int id)
 		{
-			var paramValue = Request.UrlReferrer.Segments[Request.UrlReferrer.Segments.Length - 1];
-
-			Int32 userId;
-			if (!Int32.TryParse(paramValue, out userId))
-			{
-				return new JsonResult()
-				{
-					JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-					Data = new UiResponse<string>("Incorrect user id")
-				};
-			}
-
-			var user = Rooms.GetClient(userId);
+			var user = Rooms.GetClient(id);
 			if (user == null)
 			{
 				return new JsonResult()
@@ -62,7 +51,7 @@ namespace BA.ScrumPoker.Controllers
 			};
 		}
 
-		public JsonResult GetUdapte(ClientModel model)
+		public JsonResult GetUpdates(ClientModel model)
 		{
 			var user = Rooms.GetClient(model.Id);
 			if (user == null)
