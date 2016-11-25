@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BA Scrum Poker | #EnjoyIt</title>
-    <base href="@Request.ApplicationPath" />
+    <base href="@((Request.ApplicationPath.EndsWith("/")) ? Request.ApplicationPath : Request.ApplicationPath + "/")" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 	@RenderSection("HeaderScripts", false)
