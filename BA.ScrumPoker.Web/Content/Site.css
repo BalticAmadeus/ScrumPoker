@@ -33,24 +33,24 @@ textarea {
 	left:0;
 }
 
-.create-room{
-	width:50%;
-	height:100%;
-	position:fixed;
-	top:0;
-	left:0;
-	background-color:#46639d;
-	color:#eeeeee;
-}
-
 .join-room{
 	width:50%;
 	height:100%;
 	position:fixed;
 	top:0;
-	right:0;
+	left:0;
 	background-color:#eeeeee;
 	color:#46639d;
+}
+
+.create-room{
+	width:50%;
+	height:100%;
+	position:fixed;
+	top:0;
+	right:0;
+	background-color:#46639d;
+	color:#eeeeee;
 }
 
 .home-view h1{
@@ -107,34 +107,32 @@ textarea {
 }
 
 @media only screen and (max-width: 1000px) {
-			.create-room{
-	width:100% !important;
-	height:50% !important;
-	position:fixed;
-	top:0;
-	left:0;
-	background-color:#46639d;
-	color:#eeeeee;
+    .join-room{
+	    width:100% !important;
+	    height:50% !important;
+	    position:fixed;
+	    top:0;
+	    left:0;
+	    background-color:#eeeeee;
+	    color:#46639d;
+    }
+
+    .create-room{
+	    width:100% !important;
+	    height:50% !important;
+	    position:fixed;
+	    top:50%;
+	    left:0;
+	    background-color:#46639d;
+	    color:#eeeeee;
+    }
+
+    .home-view h1{
+	    margin-top:30px;
+	    font-size:30px;
+    }
+
+    .home-view button, home-view button:hover{
+	    width:50% !important;
+    }
 }
-
-.join-room{
-	width:100% !important;
-	height:50% !important;
-	position:fixed;
-	top:50%;
-	left:0;
-	background-color:#eeeeee;
-	color:#46639d;
-
-
-}
-
-.home-view h1{
-	margin-top:30px;
-	font-size:30px;
-}
-
-.home-view button, home-view button:hover{
-	width:50% !important;
-}
-		}
