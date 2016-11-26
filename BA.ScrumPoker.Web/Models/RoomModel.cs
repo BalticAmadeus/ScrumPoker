@@ -7,7 +7,7 @@ namespace BA.ScrumPoker.Models
 {
     public class RoomModel
     {
-        public int RoomId { get; set; }
+        public string RoomId { get; set; }
         public bool CanVote { get; private set; }
         public List<ClientModel> Clients { get; set; }
 

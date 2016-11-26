@@ -22,7 +22,7 @@ namespace BA.ScrumPoker.Controllers
 			return RedirectToActionPermanent("Index", "Room", new { id = roomResponse.RoomId });
 		}
 
-		public ActionResult Join(string userName, int roomId)
+		public ActionResult Join(string userName, string roomId)
 		{
             var user = new ClientModel()
             {

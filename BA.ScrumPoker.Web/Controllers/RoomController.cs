@@ -12,13 +12,13 @@ namespace BA.ScrumPoker.Controllers
     public class RoomController : Controller
     {
         // GET: Room
-        public ActionResult Index(int id)
+        public ActionResult Index(string id)
         {
             ViewBag.RoomId = id;
             return View();
         }
 
-		public JsonResult Get(int id)
+		public JsonResult Get(string id)
 		{
             var room = Rooms.GetRoom(new RoomModel { RoomId = id });
 			if(room == null)
@@ -56,7 +56,7 @@ namespace BA.ScrumPoker.Controllers
 			};
 		}
 
-		public JsonResult GetClients(int roomId)
+		public JsonResult GetClients(string roomId)
 		{
 			var room = Rooms.GetRoom(new RoomModel { RoomId = roomId });
 			if (room == null)
