@@ -233,6 +233,7 @@
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular-qrcode.min.js" />
     <Content Include="Scripts\angular-signalr-hub.js" />
     <Content Include="Scripts\angular-signalr-hub.min.js" />
     <Content Include="Scripts\angular.js" />
@@ -258,6 +259,7 @@
     <Content Include="Scripts\loading-bar.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Modules\App.js" />
+    <Content Include="Scripts\Modules\QrController.js" />
     <Content Include="Scripts\Modules\RoomController.js" />
     <Content Include="Scripts\Modules\VotingController.js" />
     <Content Include="Scripts\respond.js" />

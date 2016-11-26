@@ -10,9 +10,10 @@ namespace BA.ScrumPoker.Controllers
 {
 	public class HomeController : Controller
 	{
-		public ActionResult Index()
+		public ActionResult Index(string roomId)
 		{
-			return View();
+            ViewBag.RoomId = roomId;
+            return View();
 		}
 
 		public ActionResult CreateRoom()
