@@ -28,7 +28,7 @@ namespace BA.ScrumPoker.Controllers
             var user = new ClientModel()
             {
                 Name = userName,
-                RoomId = roomId
+                RoomId = roomId.ToUpperInvariant()
             };
             var room = Rooms.JoinRoom(user);
 

@@ -15,11 +15,14 @@
 
 <div ng-app="ScrumPoker">
     <div ng-controller="QrController as qrctrl">
-        <button class="btn btn-primary btn-sm" ng-click="qrctrl.changeQrState()">{{qrctrl.activeState.buttonText}}</button>
+        
         <div id="room-view" ng-controller="RoomController as ctrl">
             <div class="ng-hide" ng-show="dataLoaded">
                 <div class="room-number">
-                    Room number: {{ViewModel.RoomId}}
+                    Room ID: {{ViewModel.RoomId}}
+                </div>
+                <div class="text-centered">
+                    <button class="btn btn-primary btn-lg show-qr-button" ng-click="qrctrl.changeQrState()" ng-cloak>{{qrctrl.activeState.buttonText}}</button>
                 </div>
                 <div ng-show="!qrctrl.activeState.showQr">
                     <ul class="client-list">
@@ -48,12 +51,14 @@
                 </div>
             </div>
         </div>
-        <div id="qrCode" ng-show="qrctrl.activeState.showQr">
-            <qrcode data="{{qrctrl.roomUrl}}"
-                    size="500"
-                    type_number="5"
-                    color="#46639D"
-                    background="#eeeeee"></qrcode>
+        <div class="text-centered" ng-show="qrctrl.activeState.showQr" ng-cloak>
+            <div class="qr-container">
+                <qrcode data="{{qrctrl.roomUrl}}"
+                        size="400"
+                        type_number="5"
+                        color="#46639D"
+                        background="#eeeeee"></qrcode>
+            </div>
         </div>
     </div>
 </div>
