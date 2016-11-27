@@ -10,9 +10,10 @@ namespace BA.ScrumPoker.Controllers
 {
 	public class HomeController : Controller
 	{
-		public ActionResult Index()
+		public ActionResult Index(string roomId)
 		{
-			return View();
+            ViewBag.RoomId = roomId;
+            return View();
 		}
 
 		public ActionResult CreateRoom()
@@ -22,12 +23,12 @@ namespace BA.ScrumPoker.Controllers
 			return RedirectToActionPermanent("Index", "Room", new { id = roomResponse.RoomId });
 		}
 
-		public ActionResult Join(string userName, int roomId)
+		public ActionResult Join(string userName, string roomId)
 		{
             var user = new ClientModel()
             {
                 Name = userName,
-                RoomId = roomId
+                RoomId = roomId.ToUpperInvariant()
             };
             var room = Rooms.JoinRoom(user);
 

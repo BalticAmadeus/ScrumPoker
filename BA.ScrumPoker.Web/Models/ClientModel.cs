@@ -11,7 +11,7 @@ namespace BA.ScrumPoker.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public int RoomId { get; set; }
+        public string RoomId { get; set; }
 
         public int? VoteValue { get; set; }
 

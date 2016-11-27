@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using BA.ScrumPoker.Models;
 
+using BA.ScrumPoker.Utilities;
 namespace BA.ScrumPoker.MemoryData
 {
     public static class Rooms
@@ -24,10 +25,10 @@ namespace BA.ScrumPoker.MemoryData
             return AvailableRooms;
         }
 
-        private static int GetUniqueRoomId()
+        private static string GetUniqueRoomId()
         {
             Random rd = new Random();
-            var roomNumber = rd.Next(9999);
+            var roomNumber = Base36Generator.GenerateString(length: 8);
 
             if (Rooms.GetRooms().Any(x => x.RoomId == roomNumber))
                 return GetUniqueRoomId();

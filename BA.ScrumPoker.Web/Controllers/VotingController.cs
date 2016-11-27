@@ -12,7 +12,7 @@ namespace BA.ScrumPoker.Controllers
 	public class VotingController : Controller
 	{
 		// GET: Voting
-		public ActionResult Index(int id)
+		public ActionResult Index(string id)
 		{
             ViewBag.RoomId = id;
             return View();

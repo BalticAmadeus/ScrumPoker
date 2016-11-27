@@ -25,7 +25,8 @@ namespace BA.ScrumPoker
 
 			bundles.Add(new ScriptBundle("~/bundles/angular").Include(
 					 "~/Scripts/angular.min.js",
-					 "~/Scripts/loading-bar.js",
+					 "~/Scripts/angular-qrcode.min.js",
+                     "~/Scripts/loading-bar.js",
 					 "~/Scripts/Modules/App.js"));
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(
