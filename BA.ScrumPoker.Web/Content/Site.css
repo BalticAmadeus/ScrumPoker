@@ -23,49 +23,50 @@ textarea {
 }
 
 
-.join-room{
+.join-room {
 	background-color:#eeeeee;
 	color:#46639d;
+    margin-bottom: 25px;
 }
 
 .create-room{
 	background-color:#46639d;
 	color:#eeeeee;
-    padding-bottom:50px;
+    margin-top: 15px;
+    margin-bottom: 25px;
+    padding-top: 15px;
+    padding-bottom: 25px;
 }
 
 .home-view h1{
 	text-align:center;
 	font-size:50px;
-	padding-top:100px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
-.join-room form{
+.home-view form{
 	text-align:center;
-	margin-top:50px;
 }
 
 .join-room button, .create-room button:visited, .create-room button:hover{
 	background-color:#46639d;
 	color:#eeeeee;
 	border-color:#46639d;
-	width:30%;
+	width:50%;
 }
 
 .join-room button:hover{
 	background-color:#46639d;
 }
 
-.create-room form{
-	text-align:center;
-	margin-top:50px;
-}
-
-.create-room button, .create-room button:visited, .create-room button:hover{
+.create-room button, .create-room button:visited, .create-room button:hover {
 	background-color:#eeeeee;
 	color:#46639d;
 	border-color:#46639d;
-	width:30%;
+	width:50%;
 }
 
 .create-room button:hover{
@@ -87,14 +88,30 @@ textarea {
 	padding-left:10px;
 }
 
-@media only screen and (max-width: 992px) {
-    .home-view h1{
-	    padding-top:30px;
-	    font-size:30px;
+@media only screen and (min-width: 768px) {
+    .join-room {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 50%;
     }
 
-    .home-view button, home-view button:hover{
-	    width:50% !important;
+    .create-room {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 50%;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .home-view h1 {
+        margin-left: 25px;
+        margin-right: 25px;
     }
 }
 
