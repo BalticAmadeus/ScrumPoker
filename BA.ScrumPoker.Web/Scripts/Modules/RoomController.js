@@ -16,17 +16,10 @@ ScrumPoker.controller('RoomController', ['$scope', '$http', '$filter', "$timeout
 	}
 
 	window.onbeforeunload = function (event) {
-
-		//Check if there was any change, if no changes, then simply let the user leave
-		if (!$scope.ViewModel.IsDirty && !$scope.myForm.$dirty) {
-			return;
-		}
-
-		var message = 'If you leave this page you are going to lose all unsaved changes, are you sure you want to leave?';
-
-		return message;
+	    var message = 'You are about to close voting room and voting will stop. OK?';
+	    event.returnValue = message;
+	    return message;
 	}
-
 
 	getRoomData();
 	function getRoomData() {
