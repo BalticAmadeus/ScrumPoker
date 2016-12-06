@@ -5,8 +5,8 @@
 .vote-container {
     display: inline-block;
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     margin: 10px 10px 10px 10px;
 }
 
@@ -21,9 +21,9 @@
 }
 
 .card-face {
-    font-size: 100px;
+    font-size: 80px;
     text-align: center;
-    line-height: 200px;
+    line-height: 150px;
     color: rgb(70, 99, 157);
     cursor: pointer;
 }
