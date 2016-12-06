@@ -22,8 +22,9 @@ namespace BA.ScrumPoker.Controllers
 
 		public JsonResult Get(string id)
 		{
-            var room = Rooms.GetRoom(new RoomModel { RoomId = id });
-			if(room == null)
+            var room = Rooms.Instance.GetRoom(id);
+
+			if (room == null)
 			{
 				return new JsonResult()
 				{
@@ -41,7 +42,8 @@ namespace BA.ScrumPoker.Controllers
 
 		public JsonResult StartVoting(RoomModel model)
 		{
-			var room = Rooms.StartVoting(model);
+			var room = Rooms.Instance.StartVoting(model?.RoomId);
+
 			if (room == null)
 			{
 				return new JsonResult()
@@ -60,7 +62,8 @@ namespace BA.ScrumPoker.Controllers
 
 		public JsonResult GetClients(string roomId)
 		{
-			var room = Rooms.GetRoom(new RoomModel { RoomId = roomId });
+			var room = Rooms.Instance.GetRoom(roomId);
+
 			if (room == null)
 			{
 				return new JsonResult()
@@ -81,7 +84,8 @@ namespace BA.ScrumPoker.Controllers
 
 		public JsonResult StopVoting(RoomModel model)
 		{
-			var room = Rooms.StopVoting(model);
+			var room = Rooms.Instance.StopVoting(model?.RoomId);
+
 			if (room == null)
 			{
 				return new JsonResult()

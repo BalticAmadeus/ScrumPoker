@@ -12,17 +12,18 @@ namespace BA.ScrumPoker.Controllers
 	public class VotingController : Controller
 	{
 		// GET: Voting
-		public ActionResult Index(string id)
+		public ActionResult Index(int id)
 		{
-            ViewBag.RoomId = id;
+            ViewBag.ClientId = id;
             return View();
 		}
 
 
 		public JsonResult Get(int id)
 		{
-			var user = Rooms.GetClient(id);
-			if (user == null)
+			var client = Rooms.Instance.GetClient(id);
+
+			if (client == null)
 			{
 				return new JsonResult()
 				{
@@ -37,14 +38,14 @@ namespace BA.ScrumPoker.Controllers
                 Numbers = new List<int>() { 0,1,2,3,5,8,13,21,34 }
             };
 
-            var canVote = Rooms.CanVote(user);
+            var canVote = Rooms.Instance.CanVote(client);
 
             return new JsonResult()
             {
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
                 Data = new UiResponse<VotingViewModel>(new VotingViewModel()
                 {
-                    Client = user,
+                    Client = client,
 					VotingConfiguration = VotingConfiguration.Convert(config),
 					CanIVote = canVote
 				})
@@ -53,8 +54,9 @@ namespace BA.ScrumPoker.Controllers
 
 		public JsonResult GetUpdates(ClientModel model)
 		{
-			var user = Rooms.GetClient(model.Id);
-			if (user == null)
+			var client = Rooms.Instance.GetClient(model.Id);
+
+			if (client == null)
 			{
 				return new JsonResult()
 				{
@@ -63,14 +65,14 @@ namespace BA.ScrumPoker.Controllers
 				};
 			}
 
-			var canVote = Rooms.CanVote(user);
+			var canVote = Rooms.Instance.CanVote(client);
 
 			return new JsonResult()
 			{
 				JsonRequestBehavior = JsonRequestBehavior.AllowGet,
 				Data = new UiResponse<VotingViewModel>(new VotingViewModel()
 				{
-					Client = user,
+					Client = client,
 					CanIVote = canVote
 				})
 			};
@@ -78,23 +80,21 @@ namespace BA.ScrumPoker.Controllers
 
 		public JsonResult Vote(ClientModel model)
 		{
-			Rooms.Vote(model);
+			ClientModel client = Rooms.Instance.Vote(model);
 
-			return new JsonResult()
+            if (client == null)
+            {
+                return new JsonResult()
+                {
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                    Data = new UiResponse<string>("Failed to cast vote")
+                };
+            }
+
+            return new JsonResult()
 			{
 				JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-				Data = new UiResponse<ClientModel>(model) // FIXME Should return updated model
-			};
-		}
-
-		public JsonResult CanIVote(ClientModel model)
-		{
-			var canVote = Rooms.CanVote(model);
-
-			return new JsonResult()
-			{
-				JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-				Data = new UiResponse<bool>(canVote)
+				Data = new UiResponse<ClientModel>(client)
 			};
 		}
 

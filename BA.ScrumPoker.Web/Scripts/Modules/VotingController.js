@@ -101,10 +101,10 @@ ScrumPoker.controller('VotingController', ['$scope', '$http', '$filter', "$timeo
 
 
 
-ScrumPoker.factory('VotingService', ['$http', 'RoomId', function ($http, roomId) {
+ScrumPoker.factory('VotingService', ['$http', 'ClientId', function ($http, clientId) {
 	var VotingService = {};
 	VotingService.getVotingData = function () {
-		return $http.get('Voting/Get/' + roomId);
+		return $http.get('Voting/Get/' + clientId);
 	};
 	return VotingService;
 

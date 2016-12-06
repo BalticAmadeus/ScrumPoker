@@ -15,6 +15,18 @@ namespace BA.ScrumPoker.Models
 
         public int? VoteValue { get; set; }
 
+        public bool IHaveVoted
+        {
+            get
+            {
+                return VoteValue.HasValue;
+            }
+            set
+            {
+                // do nothing, leaving here to not confuse serializers (maybe)
+            }
+        }
+
         public int Id { get; set; }
     }
 }

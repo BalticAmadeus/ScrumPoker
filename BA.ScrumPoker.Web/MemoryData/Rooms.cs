@@ -3,136 +3,156 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using BA.ScrumPoker.Models;
-
 using BA.ScrumPoker.Utilities;
+
 namespace BA.ScrumPoker.MemoryData
 {
-    public static class Rooms
+    public class Rooms
     {
+        private static Rooms _instance;
 
-        private static List<RoomModel> AvailableRooms { get; set; }
-
-        private static void Init()
+        public static Rooms Instance
         {
-            if (AvailableRooms == null)
-                AvailableRooms = new List<RoomModel>();
-
-        }
-
-        public static List<RoomModel> GetRooms()
-        {
-            Init();
-            return AvailableRooms;
-        }
-
-        private static string GetUniqueRoomId()
-        {
-            Random rd = new Random();
-            var roomNumber = Base36Generator.GenerateString(length: 8);
-
-            if (Rooms.GetRooms().Any(x => x.RoomId == roomNumber))
-                return GetUniqueRoomId();
-
-            return roomNumber;
-
-        }
-
-        public static RoomModel AddRoom()
-        {
-            Init();
-
-            var newRoom = new RoomModel
+            get
             {
-                RoomId = GetUniqueRoomId(),
-                Clients = new List<ClientModel>()
-            };
-
-            AvailableRooms.Add(newRoom);
-
-
-            return newRoom;
+                if (_instance == null)
+                    _instance = new Rooms();
+                return _instance;
+            }
         }
 
-        public static RoomModel GetRoom(RoomModel model)
-        {
-            Init();
+        private object _sync;
+        private Dictionary<string, RoomModel> _rooms;
+        private Dictionary<int, ClientModel> _clients;
+        private Random _rng;
 
-            var room = AvailableRooms.FirstOrDefault(x => x.RoomId == model.RoomId);
-            return room;
+        public Rooms()
+        {
+            _sync = new object();
+            _rooms = new Dictionary<string, RoomModel>();
+            _clients = new Dictionary<int, ClientModel>();
+            _rng = new Random();
         }
 
-        public static RoomModel StartVoting(RoomModel room)
+        public RoomModel CreateRoom()
         {
-            room = Rooms.GetRoom(room);
-            room.StartVoting();
-            return room;
-        }
-
-        public static RoomModel StopVoting(RoomModel room)
-        {
-            room = Rooms.GetRoom(room);
-            room.StopVoting();
-            return room;
-        }
-
-        public static RoomModel JoinRoom(ClientModel model)
-        {
-            Init();
-
-            var room = AvailableRooms.FirstOrDefault(x => x.RoomId == model.RoomId);
-            if (room == null)
+            lock (_sync)
+            {
+                for (int i = 10; i >= 0; i--)
+                {
+                    string roomId = Base36Generator.GenerateString(6, _rng);
+                    if (_rooms.ContainsKey(roomId))
+                        continue;
+                    var room = new RoomModel
+                    {
+                        RoomId = roomId,
+                    };
+                    _rooms[roomId] = room;
+                    room.StartVoting();
+                    return room;
+                }
                 return null;
-
-            Random rd = new Random();
-            model.Id = rd.Next(9999);
-            room.Clients.Add(model);
-
-            return room;
+            }
         }
 
-        public static RoomModel RemoveUser(ClientModel model)
+        public ClientModel JoinRoom(string userName, string roomId)
         {
-            Init();
-
-            var room = AvailableRooms.FirstOrDefault(x => x.RoomId == model.RoomId);
-            if (room == null)
-                return null;
-
-            room.Clients.Remove(model);
-            return room;
+            lock (_sync)
+            {
+                RoomModel room;
+                roomId = roomId.ToLowerInvariant();
+                if (!_rooms.TryGetValue(roomId, out room))
+                    return null;
+                ClientModel client = null;
+                for (int i = 10; i >= 0; i--)
+                {
+                    int clientId = _rng.Next();
+                    if (_clients.ContainsKey(clientId))
+                        continue;
+                    client = new ClientModel
+                    {
+                        Id = clientId,
+                        Name = userName,
+                        RoomId = roomId
+                    };
+                    break;
+                }
+                if (client == null)
+                    return null;
+                room.Clients.Add(client);
+                _clients[client.Id] = client;
+                return client;
+            }
         }
 
-        public static void Vote(ClientModel model)
+        public RoomModel GetRoom(string roomId)
         {
-            Init();
-
-            var room = AvailableRooms.FirstOrDefault(x => x.RoomId == model.RoomId);
-            if (room == null)
-                return;
-
-            var user = room.Clients.FirstOrDefault(x => x.Id == model.Id);
-            if (user == null)
-                return;
-
-            user.VoteValue = model.VoteValue;
-
+            lock (_sync)
+            {
+                RoomModel room;
+                if (!_rooms.TryGetValue(roomId, out room))
+                    return null;
+                return room;
+            }
         }
 
-        public static bool CanVote(ClientModel model)
+        public RoomModel StartVoting(string roomId)
         {
-            Init();
-
-            var room = AvailableRooms.FirstOrDefault(x => x.RoomId == model.RoomId);
-            if (room == null)
-                return false;
-
-            return room.CanVote;
+            lock (_sync)
+            {
+                RoomModel room;
+                if (!_rooms.TryGetValue(roomId, out room))
+                    return null;
+                room.StartVoting();
+                return room;
+            }
         }
 
-        public static ClientModel GetClient(int clientId)
+        public RoomModel StopVoting(string roomId)
         {
-            var user = AvailableRooms.SelectMany(x => x.Clients).SingleOrDefault(x => x.Id == clientId);
-            return user;
+            lock (_sync)
+            {
+                RoomModel room;
+                if (!_rooms.TryGetValue(roomId, out room))
+                    return null;
+                room.StopVoting();
+                return room;
+            }
         }
+
+        public ClientModel GetClient(int clientId)
+        {
+            lock (_sync)
+            {
+                ClientModel client;
+                if (!_clients.TryGetValue(clientId, out client))
+                    return null;
+                return client;
+            }
+        }
+
+        public bool CanVote(ClientModel client)
+        {
+            lock (_sync)
+            {
+                RoomModel room;
+                if (!_rooms.TryGetValue(client.RoomId, out room))
+                    return false;
+                return room.CanVote;
+            }
+        }
+
+        public ClientModel Vote(ClientModel vote)
+        {
+            lock (_sync)
+            {
+                ClientModel client;
+                if (!_clients.TryGetValue(vote.Id, out client))
+                    return null;
+                client.VoteValue = vote.VoteValue;
+                return client;
+            }
+        }
+
     }
 }

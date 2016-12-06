@@ -13,7 +13,7 @@ namespace BA.ScrumPoker.Models
 
         public void StartVoting()
         {
-            Clients.ForEach(c => c.VoteValue = 0);
+            Clients.ForEach(c => c.VoteValue = null);
             CanVote = true;
         }
 
@@ -25,7 +25,6 @@ namespace BA.ScrumPoker.Models
         public RoomModel()
         {
             Clients = new List<ClientModel>();
-
         }
     }
 }
