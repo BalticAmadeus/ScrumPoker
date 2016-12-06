@@ -15,39 +15,34 @@
 
 <div ng-app="ScrumPoker">
     <div ng-controller="QrController as qrctrl">
-        
         <div id="room-view" ng-controller="RoomController as ctrl">
-            <div class="ng-hide" ng-show="dataLoaded">
-                <div class="room-number">
-                    Room ID: {{ViewModel.RoomId}}
-                </div>
-                <div class="text-centered">
+            <div class="page-header">
+                <h1 class="room-number">Room ID: {{ViewModel.RoomId}}</h1>
+                <div class="qr-button-container">
                     <button class="btn btn-primary btn-lg show-qr-button" ng-click="qrctrl.changeQrState()" ng-cloak>{{qrctrl.activeState.buttonText}}</button>
                 </div>
-                <div ng-show="!qrctrl.activeState.showQr">
-                    <ul class="client-list">
-                        <li ng-repeat="cn in connected">
+            </div>
+            <div class="container ng-hide" ng-show="dataLoaded">
+                <div class="text-centered">
+                    
+                </div>
+                <div class="row" ng-show="!qrctrl.activeState.showQr">
+                    <div class="client-entry" ng-repeat="client in ViewModel.Clients">
 
-                            {{cn}}
-                        </li>
-                    </ul>
+                        <div class="client-header" ng-class="{'voted':client.IHaveVoted}">{{client.Name}}</div>
 
-                    <ul class="client-list">
-                        <li ng-repeat="client in ViewModel.Clients">
-
-                            <div class="hard-header" ng-class="{'voted':client.IHaveVoted}">{{client.Name}}</div>
-
-                            <div class="flip">
-                                <div class="card" ng-class="{'flipped':!isFlipped}" ng-click="flipMe(!isFlipped)">
-                                    <div class="face front">
-                                        {{client.VoteValue}}
-                                    </div>
-                                    <div class="face back">
-                                    </div>
+                        <div class="vote-container" ng-click="flipMe(!isFlipped)">
+                            <div class="vote-card" ng-show="isFlipped">
+                                <div class="card-face">
+                                    {{client.VoteValue}}
                                 </div>
                             </div>
-                        </li>
-                    </ul>
+                            <div class="vote-card" ng-hide="isFlipped">
+                                <div class="card-back"></div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
