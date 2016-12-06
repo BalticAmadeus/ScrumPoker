@@ -12,28 +12,28 @@
 }
 
 <div ng-app="ScrumPoker">
-
 	<div id="voting-view" ng-controller="VotingController" as ctrl>
 		<div class="ng-hide" ng-show="dataLoaded">
-			<div class="room-number">
-				Room number: {{ViewModel.Client.RoomId}}
+			
+            <div class="page-header">
+				<h1 class="room-number">Room number: {{ViewModel.Client.RoomId}}</h1>
 			</div>
 
-			<ul class="client-list">
-				<li ng-repeat="selection in ViewModel.VotingConfiguration.Selection" ng-click="SetMyVote(selection.Number)">
-					<div class="flip">
-						<div class="card" ng-class="{'flipped':!ViewModel.CanIVote}">
-							<div class="face front" ng-class="{'selectedCard': selection.Number == ViewModel.Client.VoteValue}">
-								{{selection.Number}}
-							</div>
-							<div class="face back">
-							</div>
-						</div>
-					</div>
-				</li>
+			<div class="container">
+                <div class="row">
+                    <div class="vote-container" ng-repeat="selection in ViewModel.VotingConfiguration.Selection" ng-click="SetMyVote(selection.Number)">
+                        <div class="vote-card" ng-show="ViewModel.CanIVote" ng-class="{'selected-card': selection.Number == ViewModel.Client.VoteValue}">
+                            <div class="card-face">
+                                {{selection.Number}}
+                            </div>
+                        </div>
+                        <div class="vote-card" ng-hide="ViewModel.CanIVote">
+                            <div class="card-back"></div>
+                        </div>
+                    </div>
+                </div>
+			</div>
 
-
-			</ul>
 		</div>
 	</div>
 </div>
