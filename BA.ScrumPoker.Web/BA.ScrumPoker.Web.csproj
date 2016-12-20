@@ -217,6 +217,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\ba.png" />
     <Content Include="Content\Images\ba-transparent.png" />
+    <Content Include="Content\Images\GitHub-Mark-Light-32px.png" />
     <Content Include="Content\loading-bar.css" />
     <Content Include="Content\loading-bar.min.css" />
     <Content Include="Content\Room.css" />

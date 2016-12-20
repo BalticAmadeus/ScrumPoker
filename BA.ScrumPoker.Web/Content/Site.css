@@ -88,6 +88,20 @@ textarea {
 	padding-left:10px;
 }
 
+.source-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.source-link a {
+    color: #eeeeee;
+    font-weight: bold;
+}
+
+.source-link a:hover {
+    color: white;
+}
+
 @media only screen and (min-width: 768px) {
     .join-room {
         position: absolute;
