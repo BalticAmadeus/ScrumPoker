@@ -255,7 +255,6 @@
     <Content Include="Scripts\loading-bar.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Modules\App.js" />
-    <Content Include="Scripts\Modules\QrController.js" />
     <Content Include="Scripts\Modules\RoomController.js" />
     <Content Include="Scripts\Modules\roomService.js" />
     <Content Include="Scripts\Modules\VotingController.js" />

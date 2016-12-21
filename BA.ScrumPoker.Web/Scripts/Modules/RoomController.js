@@ -4,9 +4,9 @@
         .module('ScrumPoker')
         .controller('RoomController', roomController);
 
-    roomController.$inject = ["$timeout", 'roomService'];
+    roomController.$inject = ['$timeout', 'roomService', 'RoomId', 'BaseUrl'];
 
-    function roomController($timeout, roomService) {
+    function roomController($timeout, roomService, roomId, baseUrl) {
 
         var ctrl = this;
 
@@ -14,12 +14,21 @@
         ctrl.dataLoaded = false;
         ctrl.isFlipped = false;
         ctrl.showOverlay = false;
+        ctrl.showQr = false;
 
+        ctrl.roomUrl = baseUrl + '?roomId=' + roomId;
+
+        ctrl.changeQrState = changeQrState;
         ctrl.flipMe = flipMe;
 
         window.onbeforeunload = onbeforeunload;
 
         getRoomData();
+
+        function changeQrState() {
+
+            ctrl.showQr = !ctrl.showQr;
+        }
 
         function onbeforeunload(event) {
 
@@ -28,7 +37,6 @@
 
             return message;
         }
-
 
         function getRoomData() {
             roomService.getRoomData().then(success, error);

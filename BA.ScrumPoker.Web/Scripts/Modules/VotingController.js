@@ -4,7 +4,7 @@
         .module('ScrumPoker')
         .controller('VotingController', votingController);
 
-    votingController.$inject = ['$http', '$filter', "$timeout", 'votingService'];
+    votingController.$inject = ['$http', '$filter', '$timeout', 'votingService'];
 
     function votingController($http, $filter, $timeout, votingService) {
 
