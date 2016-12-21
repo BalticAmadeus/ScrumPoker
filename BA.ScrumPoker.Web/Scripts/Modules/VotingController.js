@@ -1,112 +1,132 @@
-﻿
+﻿(function () {
+    'use strict';
+    angular
+        .module('ScrumPoker')
+        .controller('VotingController', votingController);
 
-ScrumPoker.controller('VotingController', ['$scope', '$http', '$filter', "$timeout", 'VotingService', function ($scope, $http, $filter, $timeout, VotingService) {
-	$scope.dirtySetter = false;
-	$scope.dataLoaded = false;
+    votingController.$inject = ['$scope', '$http', '$filter', "$timeout", 'votingService'];
 
+    function votingController($scope, $http, $filter, $timeout, votingService) {
 
-	$scope.Errors = [];
-	$scope.addError = function (message) {
-		$scope.Errors.push(
-			{
-				Content: message
-			}
-		);
-		$timeout(function () {
-			$scope.Errors.pop();
-		}, 3000);
-	}
+        $scope.dirtySetter = false;
+        $scope.dataLoaded = false;
 
-	getVotingData();
-	function getVotingData() {
-		VotingService.getVotingData()
-            .success(function (response) {
-            	$scope.ViewModel = response.Data;
-            	$scope.dataLoaded = true;
-            	$scope.UpdateClient();
+        $scope.Errors = [];
+
+        $scope.SetMyVote = setMyVote;
+        $scope.ifServiceCallFailed = ifServiceCallFailed;
+        $scope.UpdateClientRequest = updateClientRequest;
+        $scope.UpdateClient = updateClient;
+        $scope.addError = addError;
+
+        function addError(message) {
+            $scope.Errors.push(
+                {
+                    Content: message
+                }
+            );
+            $timeout(function () {
+                $scope.Errors.pop();
+            }, 3000);
+        }
+
+        getVotingData();
+
+        function getVotingData() {
+
+            votingService.getVotingData()
+                .success(function (response) {
+
+                    $scope.ViewModel = response.Data;
+                    $scope.dataLoaded = true;
+                    updateClient();
+                })
+                .error(function (error) {
+
+                    $scope.status = 'Unable to load customer data: ' + error.message;
+                    console.log($scope.status);
+                });
+        }
+
+        function setMyVote(number) {
+
+            if (!$scope.ViewModel.CanIVote) {
+                return;
+            }
+
+            $scope.ViewModel.Client.VoteValue = number;
+
+            $http.post('Voting/Vote', { model: $scope.ViewModel.Client }).success(function (response) {
+
+                if (ifServiceCallFailed(response)) {
+                    return;
+                }
+
+                $scope.ViewModel.Client = response.Data;
             })
-            .error(function (error) {
-            	$scope.status = 'Unable to load customer data: ' + error.message;
-            	console.log($scope.status);
+            .error(function (data, status, headers, config) {
+
+                addError(error);
+            }).finally(function () {
+
+                $scope.showOverlay = false;
             });
-	}
 
+        }
 
+        function ifServiceCallFailed(data) {
 
-	$scope.SetMyVote = function(number)
-	{
-		if (!$scope.ViewModel.CanIVote)
-			return;
+            if (data.Error) {
 
-		$scope.ViewModel.Client.VoteValue = number;
+                if (data.Error.HasError) {
 
-		$http.post('Voting/Vote', { model: $scope.ViewModel.Client }).success(function (response) {
-			if ($scope.ifServiceCallFailed(response))
-				return;
+                    addError(data.Error.Message);
+                    return true;
+                }
+            }
+            return false;
+        }
 
-			$scope.ViewModel.Client = response.Data;
-		})
-		.error(function (data, status, headers, config) {
-			$scope.addError(error);
-		}).finally(function () {
-			$scope.showOverlay = false;
-		});
+        function updateClient() {
 
-	}
+            setTimeout(function () {
 
-	$scope.ifServiceCallFailed = function (data) {
-		if (data.Error) {
-			if (data.Error.HasError) {
-				$scope.addError(data.Error.Message);
-				return true;
-			}
-		}
-		return false;
-	}
+                updateClientRequest();
+            }, 2000);
+        }
 
-	$scope.UpdateClient = function () {
-		setTimeout(function () {
-			$scope.UpdateClientRequest();
-		}, 2000);
-	}
+        function updateClientRequest() {
 
-	$scope.UpdateClientRequest = function(){
-		$http.post('Voting/GetUpdates', { model: $scope.ViewModel.Client }).success(function (response) {
-			if ($scope.ifServiceCallFailed(response))
-			{
-				$scope.UpdateClient();
-				return;
-			}
+            $http.post('Voting/GetUpdates', { model: $scope.ViewModel.Client }).success(function (response) {
 
-			$scope.ViewModel.Client = response.Data.Client
-			$scope.ViewModel.CanIVote = response.Data.CanIVote;
-			$scope.UpdateClient();
-			
-		})
-		.error(function (data, status, headers, config) {
-			$scope.addError(error);
-		}).finally(function () {
-			$scope.showOverlay = false;
-		});
-	}
+                if (ifServiceCallFailed(response)) {
+                    updateClient();
+                    return;
+                }
 
-	var find = function (id) {
-		for (var i = 0; i < ViewModel.Clients.length; i++) {
-			if (ViewModel.Clients[i].Id == id) return ViewModel.Clients[i];
-		}
-		return null;
-	};
+                $scope.ViewModel.Client = response.Data.Client
+                $scope.ViewModel.CanIVote = response.Data.CanIVote;
+                UpdateClient();
 
-}]);
+            })
+            .error(function (data, status, headers, config) {
 
+                addError(error);
+            }).finally(function () {
 
+                $scope.showOverlay = false;
+            });
+        }
 
-ScrumPoker.factory('VotingService', ['$http', 'ClientId', function ($http, clientId) {
-	var VotingService = {};
-	VotingService.getVotingData = function () {
-		return $http.get('Voting/Get/' + clientId);
-	};
-	return VotingService;
+        function find(id) {
+            for (var i = 0; i < ViewModel.Clients.length; i++) {
+                if (ViewModel.Clients[i].Id === id) {
 
-}]);
+                    return ViewModel.Clients[i];
+                }
+            }
+            return null;
+        };
+    }
 
+})();

@@ -1,25 +1,36 @@
-﻿
-ScrumPoker.controller('QrController', ['$scope', 'RoomId', 'BaseUrl', function ($scope, RoomId, BaseUrl) {
-    var ctrl = this;
+﻿(function() {
+    'use strict';
+    angular
+        .module('ScrumPoker')
+        .controller('QrController', qrController);
 
-    ctrl.roomUrl = BaseUrl + '?roomId=' + RoomId;
+    qrController.$inject = ['RoomId', 'BaseUrl'];
 
-    var showQrCodeState = {
-        showQr: true,
-        buttonText: "Hide QR Code"
-    };
-    var hideQrCodeState = {
-        showQr: false,
-        buttonText: "Show QR Code"
-    };
+    function qrController(roomId, baseUrl) {
 
-    ctrl.activeState = hideQrCodeState;
+        var ctrl = this;
 
-    ctrl.changeQrState = function () {
-        if (ctrl.activeState.showQr === true) {
-            ctrl.activeState = hideQrCodeState;
-        } else {
-            ctrl.activeState = showQrCodeState;
+        ctrl.changeQrState = changeQrState;
+
+        ctrl.roomUrl = baseUrl + '?roomId=' + roomId;
+
+        var showQrCodeState = {
+            showQr: true,
+            buttonText: "Hide QR Code"
+        };
+        var hideQrCodeState = {
+            showQr: false,
+            buttonText: "Show QR Code"
+        };
+
+        ctrl.activeState = hideQrCodeState;
+
+        function changeQrState() {
+            if (ctrl.activeState.showQr === true) {
+                ctrl.activeState = hideQrCodeState;
+            } else {
+                ctrl.activeState = showQrCodeState;
+            }
         }
     }
-}]);
+})();

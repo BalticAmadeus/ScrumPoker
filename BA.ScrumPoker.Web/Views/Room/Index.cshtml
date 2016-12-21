@@ -1,16 +1,18 @@
 ﻿@section scripts
 {
-	@Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/angular")
     <script>
         ScrumPoker.value('RoomId', '@ViewBag.RoomId');
         ScrumPoker.value('BaseUrl', '@ViewBag.BaseUrl');
     </script>
+
+    <script type="text/javascript" src="~/Scripts/Modules/roomService.js"></script>
     <script type="text/javascript" src="~/Scripts/Modules/QrController.js"></script>
-	<script type="text/javascript" src="~/Scripts/Modules/RoomController.js"></script>
+    <script type="text/javascript" src="~/Scripts/Modules/RoomController.js"></script>
 }
 @section HeaderScripts
 {
-	@Styles.Render("~/Room/css")
+    @Styles.Render("~/Room/css")
 }
 
 <div ng-app="ScrumPoker">
@@ -24,7 +26,7 @@
             </div>
             <div class="container ng-hide" ng-show="dataLoaded">
                 <div class="text-centered">
-                    
+
                 </div>
                 <div class="row" ng-show="!qrctrl.activeState.showQr">
                     <div class="client-entry" ng-repeat="client in ViewModel.Clients">
