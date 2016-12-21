@@ -21,14 +21,14 @@
             <div class="page-header">
                 <h1 class="room-number">Room ID: {{ViewModel.RoomId}}</h1>
                 <div class="qr-button-container">
-                    <button class="btn btn-primary btn-lg show-qr-button" ng-click="qrctrl.changeQrState()" ng-cloak>{{qrctrl.activeState.buttonText}}</button>
+                    <button class="btn btn-primary btn-lg show-qr-button" ng-click="qrctrl.changeQrState()" ng-cloak>{{qrctrl.showQr ? 'Hide QR Code' : 'Show QR Code'}}</button>
                 </div>
             </div>
             <div class="container ng-hide" ng-show="dataLoaded">
                 <div class="text-centered">
 
                 </div>
-                <div class="row" ng-show="!qrctrl.activeState.showQr">
+                <div class="row" ng-show="!qrctrl.showQr">
                     <div class="client-entry" ng-repeat="client in ViewModel.Clients">
 
                         <div class="client-header" ng-class="{'voted':client.IHaveVoted}">{{client.Name}}</div>
@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <div class="text-centered" ng-show="qrctrl.activeState.showQr" ng-cloak>
+        <div class="text-centered" ng-show="qrctrl.showQr" ng-cloak>
             <div class="qr-container">
                 <qrcode data="{{qrctrl.roomUrl}}"
                         size="400"

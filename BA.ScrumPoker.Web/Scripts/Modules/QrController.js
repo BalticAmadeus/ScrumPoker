@@ -10,26 +10,17 @@
 
         var ctrl = this;
 
+        ctrl.showQr = false;
+
         ctrl.changeQrState = changeQrState;
 
         ctrl.roomUrl = baseUrl + '?roomId=' + roomId;
 
-        var showQrCodeState = {
-            showQr: true,
-            buttonText: "Hide QR Code"
-        };
-        var hideQrCodeState = {
-            showQr: false,
-            buttonText: "Show QR Code"
-        };
-
-        ctrl.activeState = hideQrCodeState;
-
         function changeQrState() {
-            if (ctrl.activeState.showQr === true) {
-                ctrl.activeState = hideQrCodeState;
+            if (ctrl.showQr === true) {
+                ctrl.showQr = false;
             } else {
-                ctrl.activeState = showQrCodeState;
+                ctrl.showQr = true;
             }
         }
     }
