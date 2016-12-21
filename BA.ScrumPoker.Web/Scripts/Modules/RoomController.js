@@ -42,7 +42,6 @@
             roomService.getRoomData().then(success, error);
 
             function success(response) {
-                console.log(response);
 
                 ctrl.ViewModel = response.data.Data;
                 ctrl.dataLoaded = true;
