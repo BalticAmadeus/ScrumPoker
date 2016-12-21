@@ -36,18 +36,14 @@
 
         function getVotingData() {
 
-            votingService.getVotingData()
-                .success(function (response) {
+            votingService.getVotingData().then(success, error);
 
-                    ctrl.ViewModel = response.Data;
-                    ctrl.dataLoaded = true;
-                    updateClient();
-                })
-                .error(function (error) {
+            function success(response) {
 
-                    ctrl.status = 'Unable to load customer data: ' + error.message;
-                    console.log(ctrl.status);
-                });
+                ctrl.ViewModel = response.Data;
+                ctrl.dataLoaded = true;
+                updateClient();
+            }
         }
 
         function setMyVote(number) {
@@ -58,21 +54,16 @@
 
             ctrl.ViewModel.Client.VoteValue = number;
 
-            $http.post('Voting/Vote', { model: ctrl.ViewModel.Client }).success(function (response) {
+            function success(response) {
 
                 if (ifServiceCallFailed(response)) {
                     return;
                 }
 
                 ctrl.ViewModel.Client = response.Data;
-            })
-            .error(function (data, status, headers, config) {
+            }
 
-                addError(error);
-            }).finally(function () {
-
-                ctrl.showOverlay = false;
-            });
+            $http.post('Voting/Vote', { model: ctrl.ViewModel.Client }).then(success, error).finally(afterRequest);
 
         }
 
@@ -99,25 +90,27 @@
 
         function updateClientRequest() {
 
-            $http.post('Voting/GetUpdates', { model: ctrl.ViewModel.Client }).success(function (response) {
+            $http.post('Voting/GetUpdates', { model: ctrl.ViewModel.Client }).then(success, error).finally(afterRequest);
+
+            function success(response) {
 
                 if (ifServiceCallFailed(response)) {
                     updateClient();
                     return;
                 }
 
-                ctrl.ViewModel.Client = response.Data.Client
+                ctrl.ViewModel.Client = response.Data.Client;
                 ctrl.ViewModel.CanIVote = response.Data.CanIVote;
                 UpdateClient();
+            }
+        }
 
-            })
-            .error(function (data, status, headers, config) {
+        function error(response) {
+            console.log(response);
+        }
 
-                addError(error);
-            }).finally(function () {
-
-                ctrl.showOverlay = false;
-            });
+        function afterRequest() {
+            ctrl.showOverlay = false;
         }
 
         function find(id) {
