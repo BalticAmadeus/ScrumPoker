@@ -4,22 +4,24 @@
         .module('ScrumPoker')
         .controller('RoomController', roomController);
 
-    roomController.$inject = ['$scope', '$http', '$filter', "$timeout", 'roomService'];
+    roomController.$inject = ['$http', '$filter', "$timeout", 'roomService'];
 
-    function roomController($scope, $http, $filter, $timeout, roomService) {
-        
-        $scope.dirtySetter = false;
-        $scope.dataLoaded = false;
-        $scope.Errors = [];
+    function roomController($http, $filter, $timeout, roomService) {
 
-        $scope.addError = function (message) {
-            $scope.Errors.push(
+        var ctrl = this;
+
+        ctrl.dirtySetter = false;
+        ctrl.dataLoaded = false;
+        ctrl.Errors = [];
+
+        ctrl.addError = function (message) {
+            ctrl.Errors.push(
                 {
                     Content: message
                 }
             );
             $timeout(function () {
-                $scope.Errors.pop();
+                ctrl.Errors.pop();
             }, 3000);
         }
 
@@ -33,60 +35,60 @@
         function getRoomData() {
             roomService.getRoomData()
                 .success(function (response) {
-                    $scope.ViewModel = response.Data;
-                    $scope.dataLoaded = true;
-                    $scope.UpdateClients();
+                    ctrl.ViewModel = response.Data;
+                    ctrl.dataLoaded = true;
+                    ctrl.UpdateClients();
                 })
                 .error(function (error) {
-                    $scope.status = 'Unable to load customer data: ' + error.message;
-                    console.log($scope.status);
+                    ctrl.status = 'Unable to load customer data: ' + error.message;
+                    console.log(ctrl.status);
                 });
         }
 
-        $scope.StartVoting = function () {
-            $http.post('Room/StartVoting', { model: $scope.ViewModel }).success(function (response) {
-                $scope.ViewModel = response.Data;
+        ctrl.StartVoting = function () {
+            $http.post('Room/StartVoting', { model: ctrl.ViewModel }).success(function (response) {
+                ctrl.ViewModel = response.Data;
 
             })
             .error(function (data, status, headers, config) {
-                $scope.addError(error);
+                ctrl.addError(error);
             }).finally(function () {
-                $scope.showOverlay = false;
+                ctrl.showOverlay = false;
 
             });
         }
 
-        $scope.flipMe = function (varl) {
+        ctrl.flipMe = function (varl) {
 
             setTimeout(function () {
-                $scope.$apply(function () {
-                    $scope.isFlipped = varl;
+                ctrl.$apply(function () {
+                    ctrl.isFlipped = varl;
                 });
             }, 400);
 
             if (varl)
-                $scope.StopVoting();
+                ctrl.StopVoting();
             else
-                $scope.StartVoting();
+                ctrl.StartVoting();
         }
 
-        $scope.StopVoting = function () {
-            $http.post('Room/StopVoting', { model: $scope.ViewModel }).success(function (response) {
-                $scope.ViewModel = response.Data;
+        ctrl.StopVoting = function () {
+            ctrl.post('Room/StopVoting', { model: ctrl.ViewModel }).success(function (response) {
+                ctrl.ViewModel = response.Data;
 
 
             })
             .error(function (data, status, headers, config) {
-                $scope.addError(error);
+                ctrl.addError(error);
             }).finally(function () {
-                $scope.showOverlay = false;
+                ctrl.showOverlay = false;
             });
         }
 
-        $scope.ifServiceCallFailed = function (data) {
+        ctrl.ifServiceCallFailed = function (data) {
             if (data.Error) {
                 if (data.Error.HasError) {
-                    $scope.addError(data.Error.Message);
+                    ctrl.addError(data.Error.Message);
                     return true;
                 }
             }
@@ -94,41 +96,42 @@
         }
 
 
-        $scope.UpdateClients = function () {
+        ctrl.UpdateClients = function () {
             setTimeout(function () {
-                $scope.UpdateClientsRequest();
+                ctrl.UpdateClientsRequest();
             }, 2000);
         }
 
-        $scope.UpdateClientsRequest = function () {
-            $http.post('Room/GetClients', { roomId: $scope.ViewModel.RoomId }).success(function (response) {
-                for (var i = 0 ; i < response.Data.length; i++) {
-                    var inArray = findOrUpdate(response.Data[i]);
-                    if (!inArray)
-                        $scope.ViewModel.Clients.push(response.Data[i]);
-                }
-
-                $scope.UpdateClients();
-
-            })
-            .error(function (data, status, headers, config) {
-                $scope.addError(error);
-            }).finally(function () {
-                $scope.showOverlay = false;
-            });
-        }
-
         var findOrUpdate = function (client) {
-            for (var i = 0; i < $scope.ViewModel.Clients.length; i++) {
-                if ($scope.ViewModel.Clients[i].Id == client.Id) {
-                    $scope.ViewModel.Clients[i].VoteValue = client.VoteValue;
-                    $scope.ViewModel.Clients[i].IHaveVoted = client.IHaveVoted;
-                    return $scope.ViewModel.Clients[i];
+            for (var i = 0; i < ctrl.ViewModel.Clients.length; i++) {
+                if (ctrl.ViewModel.Clients[i].Id == client.Id) {
+                    ctrl.ViewModel.Clients[i].VoteValue = client.VoteValue;
+                    ctrl.ViewModel.Clients[i].IHaveVoted = client.IHaveVoted;
+                    return ctrl.ViewModel.Clients[i];
                 }
 
             }
             return null;
         };
+
+        ctrl.UpdateClientsRequest = function () {
+            $http.post('Room/GetClients', { roomId: ctrl.ViewModel.RoomId }).success(function (response) {
+                for (var i = 0 ; i < response.Data.length; i++) {
+                    var inArray = findOrUpdate(response.Data[i]);
+                    if (!inArray)
+                        ctrl.ViewModel.Clients.push(response.Data[i]);
+                }
+
+                ctrl.UpdateClients();
+
+            })
+            .error(function (data, status, headers, config) {
+                ctrl.addError(error);
+            }).finally(function () {
+                ctrl.showOverlay = false;
+            });
+        }
+
     }
 
 })();

@@ -17,29 +17,29 @@
 
 <div ng-app="ScrumPoker">
     <div ng-controller="QrController as qrctrl">
-        <div id="room-view" ng-controller="RoomController as ctrl">
+        <div id="room-view" ng-controller="RoomController as roomCtrl">
             <div class="page-header">
-                <h1 class="room-number">Room ID: {{ViewModel.RoomId}}</h1>
+                <h1 class="room-number">Room ID: {{roomCtrl.ViewModel.RoomId}}</h1>
                 <div class="qr-button-container">
                     <button class="btn btn-primary btn-lg show-qr-button" ng-click="qrctrl.changeQrState()" ng-cloak>{{qrctrl.showQr ? 'Hide QR Code' : 'Show QR Code'}}</button>
                 </div>
             </div>
-            <div class="container ng-hide" ng-show="dataLoaded">
+            <div class="container ng-hide" ng-show="roomCtrl.dataLoaded">
                 <div class="text-centered">
 
                 </div>
                 <div class="row" ng-show="!qrctrl.showQr">
-                    <div class="client-entry" ng-repeat="client in ViewModel.Clients">
+                    <div class="client-entry" ng-repeat="client in roomCtrl.ViewModel.Clients">
 
                         <div class="client-header" ng-class="{'voted':client.IHaveVoted}">{{client.Name}}</div>
 
-                        <div class="vote-container" ng-click="flipMe(!isFlipped)">
-                            <div class="vote-card" ng-show="isFlipped">
+                        <div class="vote-container" ng-click="roomCtrl.flipMe(!isFlipped)">
+                            <div class="vote-card" ng-show="roomCtrl.isFlipped">
                                 <div class="card-face">
                                     {{client.VoteValue}}
                                 </div>
                             </div>
-                            <div class="vote-card" ng-hide="isFlipped">
+                            <div class="vote-card" ng-hide="roomCtrl.isFlipped">
                                 <div class="card-back"></div>
                             </div>
                         </div>
