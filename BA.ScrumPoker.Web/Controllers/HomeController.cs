@@ -1,9 +1,4 @@
 ﻿using BA.ScrumPoker.MemoryData;
-using BA.ScrumPoker.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace BA.ScrumPoker.Controllers

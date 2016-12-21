@@ -1,8 +1,8 @@
 ﻿(function () {
     'use strict';
     angular
-        .module('ScrumPoker')
-        .controller('votingService', votingService);
+        .module('scrumPoker')
+        .factory('votingService', votingService);
 
     votingService.$inject = ['$http', 'ClientId'];
 

@@ -1,10 +1,7 @@
 ﻿using BA.ScrumPoker.Infrasturcture;
 using BA.ScrumPoker.MemoryData;
 using BA.ScrumPoker.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace BA.ScrumPoker.Controllers
@@ -79,8 +76,6 @@ namespace BA.ScrumPoker.Controllers
 				Data = new UiResponse<List<ClientModel>>(room.Clients)
 			};
 		}
-
-		
 
 		public JsonResult StopVoting(RoomModel model)
 		{

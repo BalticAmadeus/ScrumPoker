@@ -1,7 +1,7 @@
 ﻿(function () {
     'use strict';
     angular
-        .module('ScrumPoker')
+        .module('scrumPoker')
         .factory('roomService', roomService);
 
     roomService.$inject = ['$http', 'RoomId'];

@@ -1,1 +1,1 @@
-﻿var ScrumPoker = angular.module('ScrumPoker', ['angular-loading-bar', 'vs.qrcode']);
+﻿var scrumPoker = angular.module('scrumPoker', ['angular-loading-bar', 'vs.qrcode']);

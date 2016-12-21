@@ -2,20 +2,21 @@
 {
     @Scripts.Render("~/bundles/angular")
     <script>
-        ScrumPoker.value('RoomId', '@ViewBag.RoomId');
-        ScrumPoker.value('BaseUrl', '@ViewBag.BaseUrl');
+        scrumPoker.value('RoomId', '@ViewBag.RoomId');
+        scrumPoker.value('BaseUrl', '@ViewBag.BaseUrl');
     </script>
 
     <script type="text/javascript" src="~/Scripts/Modules/roomService.js"></script>
-    <script type="text/javascript" src="~/Scripts/Modules/RoomController.js"></script>
+    <script type="text/javascript" src="~/Scripts/Modules/roomController.js"></script>
 }
+
 @section HeaderScripts
 {
     @Styles.Render("~/Room/css")
 }
 
-<div ng-app="ScrumPoker">
-    <div ng-controller="RoomController as roomCtrl">
+<div>
+    <div ng-controller="roomController as roomCtrl">
         <div id="room-view">
             <div class="page-header">
                 <h1 class="room-number" ng-cloak>Room ID: {{roomCtrl.ViewModel.RoomId}}</h1>

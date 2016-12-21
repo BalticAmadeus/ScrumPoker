@@ -1,33 +1,39 @@
-﻿<div class="home-view">
-    <div class="join-room">
-        <h1>Join existing room</h1>
-        @using (Html.BeginForm("Join", "Home", FormMethod.Post))
-        {
-            <div class="form-group">
-                <input type="text" name="roomId" placeholder="Room Number" required value="@ViewBag.RoomId" />
-            </div>
-            <div class="form-group">
-                <input type="text" name="userName" placeholder="User Name" required />
+﻿@section scripts
+{
+    @Scripts.Render("~/bundles/angular")
 
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg">Join Room &raquo;</button>
+<script type="text/javascript" src="~/Scripts/Modules/homeService.js"></script>
+<script type="text/javascript" src="~/Scripts/Modules/homeController.js"></script>
+}
 
-            <p class="text-danger" style="margin-top: 25px">
-                @Html.ValidationMessage("joinRoomError")
-            </p>
-        }
-    </div>
-    <div class="create-room">
-        <h1>Create you own room</h1>
-        @using (Html.BeginForm("CreateRoom", "Home", FormMethod.Post))
-        {
-            <div>
-                <button type="submit" class="btn btn-primary btn-lg">Create Room &raquo;</button>
+<div class="home-view">
+    <div ng-controller="homeController as homeCtrl">
+        <div class="join-room">
+            <h1>Join existing room</h1>
+            <form>
+
+                <div class="form-group">
+                    <input ng-model="homeCtrl.joinRoomModel.roomId" type="text" name="roomId" placeholder="Room Number" required value="@ViewBag.RoomId" />
+                </div>
+                <div class="form-group">
+                    <input ng-model="homeCtrl.joinRoomModel.userName" type="text" name="userName" placeholder="User Name" required />
+                </div>
+
+                <button type="submit" ng-click="homeCtrl.joinRoom(homeCtrl.joinRoomModel)" class="btn btn-primary btn-lg">Join Room &raquo;</button>
+            </form>
+            <p class="text-danger" style="margin-top: 25px"></p>
+        </div>
+        <div class="create-room">
+            <h1>Create you own room</h1>
+            <form>
+                <div>
+                    <button type="submit" class="btn btn-primary btn-lg">Create Room &raquo;</button>
+                </div>
+                @Html.ValidationMessage("createRoomError")
+            </form>
+            <div class="source-link">
+                <a href="https://github.com/BalticAmadeus/ScrumPoker"><img src="~/Content/Images/GitHub-Mark-Light-32px.png"></a> Join us on <a href="https://github.com/BalticAmadeus/ScrumPoker">GitHub</a> to improve this solution.
             </div>
-            @Html.ValidationMessage("createRoomError")
-        }
-        <div class="source-link">
-            <a href="https://github.com/BalticAmadeus/ScrumPoker"><img src="~/Content/Images/GitHub-Mark-Light-32px.png"></a> Join us on <a href="https://github.com/BalticAmadeus/ScrumPoker">GitHub</a> to improve this solution.
         </div>
     </div>
 </div>

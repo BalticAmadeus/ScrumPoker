@@ -1,12 +1,12 @@
 ﻿(function () {
     'use strict';
     angular
-        .module('ScrumPoker')
-        .controller('RoomController', roomController);
+        .module('scrumPoker')
+        .controller('roomController', roomController);
 
-    roomController.$inject = ['$timeout', 'roomService', 'RoomId', 'BaseUrl'];
+    roomController.$inject = ['$scope', '$timeout', 'roomService', 'RoomId', 'BaseUrl'];
 
-    function roomController($timeout, roomService, roomId, baseUrl) {
+    function roomController($scope, $timeout, roomService, roomId, baseUrl) {
 
         var ctrl = this;
 

@@ -1,8 +1,8 @@
 ﻿(function () {
     'use strict';
     angular
-        .module('ScrumPoker')
-        .controller('VotingController', votingController);
+        .module('scrumPoker')
+        .controller('votingController', votingController);
 
     votingController.$inject = ['$http', '$filter', '$timeout', 'votingService'];
 
@@ -40,7 +40,8 @@
 
             function success(response) {
 
-                ctrl.ViewModel = response.Data;
+                ctrl.ViewModel = response.data.Data;
+
                 ctrl.dataLoaded = true;
                 updateClient();
             }
@@ -51,7 +52,6 @@
             if (!ctrl.ViewModel.CanIVote) {
                 return;
             }
-
             ctrl.ViewModel.Client.VoteValue = number;
 
             function success(response) {
@@ -93,15 +93,14 @@
             $http.post('Voting/GetUpdates', { model: ctrl.ViewModel.Client }).then(success, error).finally(afterRequest);
 
             function success(response) {
-
+                console.log(response);
                 if (ifServiceCallFailed(response)) {
                     updateClient();
                     return;
                 }
-
-                ctrl.ViewModel.Client = response.Data.Client;
-                ctrl.ViewModel.CanIVote = response.Data.CanIVote;
-                UpdateClient();
+                ctrl.ViewModel.Client = response.data.Data.Client;
+                ctrl.ViewModel.CanIVote = response.data.Data.CanIVote;
+                updateClient();
             }
         }
 
