@@ -16,25 +16,29 @@ namespace BA.ScrumPoker.Controllers
             return View();
 		}
 
+		[HttpPost]
 		public ActionResult CreateRoom()
 		{
             var room = Rooms.Instance.CreateRoom();
 
             if (room == null)
             {
-                ModelState.AddModelError("Error", "Failed to create the room");
-            }
+                ModelState.AddModelError("createRoomError", "Failed to create the room");
+	            return View("Index");
+			}
 
-            return RedirectToActionPermanent("Index", "Room", new { id = room.RoomId });
+			return RedirectToActionPermanent("Index", "Room", new { id = room.RoomId });
 		}
 
+		[HttpPost]
 		public ActionResult Join(string userName, string roomId)
 		{
             var client = Rooms.Instance.JoinRoom(userName, roomId);
 
 			if (client == null)
 			{
-				ModelState.AddModelError("Error", "Failed to join the room");
+				ModelState.AddModelError("joinRoomError", "Failed to join the room");
+	            return View("Index");
 			}
 
 			return RedirectToActionPermanent("Index", "Voting", new { id = client.Id });

@@ -8,15 +8,23 @@
             </div>
             <div class="form-group">
                 <input type="text" name="userName" placeholder="User Name" required />
+
             </div>
             <button type="submit" class="btn btn-primary btn-lg">Join Room &raquo;</button>
+
+            <p class="text-danger" style="margin-top: 25px">
+                @Html.ValidationMessage("joinRoomError")
+            </p>
         }
     </div>
     <div class="create-room">
         <h1>Create you own room</h1>
         @using (Html.BeginForm("CreateRoom", "Home", FormMethod.Post))
         {
-            <button type="submit" class="btn btn-primary btn-lg">Create Room &raquo;</button>
+            <div>
+                <button type="submit" class="btn btn-primary btn-lg">Create Room &raquo;</button>
+            </div>
+            @Html.ValidationMessage("createRoomError")
         }
         <div class="source-link">
             <a href="https://github.com/BalticAmadeus/ScrumPoker"><img src="~/Content/Images/GitHub-Mark-Light-32px.png"></a> Join us on <a href="https://github.com/BalticAmadeus/ScrumPoker">GitHub</a> to improve this solution.
