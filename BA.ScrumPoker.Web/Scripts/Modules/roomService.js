@@ -2,7 +2,7 @@
     'use strict';
     angular
         .module('ScrumPoker')
-        .controller('roomService', roomService);
+        .factory('roomService', roomService);
 
     roomService.$inject = ['$http', 'RoomId'];
 

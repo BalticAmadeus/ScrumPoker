@@ -257,7 +257,9 @@
     <Content Include="Scripts\Modules\App.js" />
     <Content Include="Scripts\Modules\QrController.js" />
     <Content Include="Scripts\Modules\RoomController.js" />
+    <Content Include="Scripts\Modules\roomService.js" />
     <Content Include="Scripts\Modules\VotingController.js" />
+    <Content Include="Scripts\Modules\votingService.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
