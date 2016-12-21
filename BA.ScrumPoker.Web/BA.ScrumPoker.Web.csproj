@@ -194,8 +194,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Room\Controllers\RoomApiController.cs" />
+    <Compile Include="Areas\Room\Models\JoinRoomModel.cs" />
+    <Compile Include="Areas\Vote\Controllers\VoteApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\JsonNetResult.cs" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\VotingController.cs" />
     <Compile Include="Models\VotingConfigurationModel.cs" />
@@ -256,7 +258,6 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Modules\app.js" />
     <Content Include="Scripts\Modules\homeController.js" />
-    <Content Include="Scripts\Modules\homeService.js" />
     <Content Include="Scripts\Modules\roomController.js" />
     <Content Include="Scripts\Modules\roomService.js" />
     <Content Include="Scripts\Modules\votingController.js" />
@@ -281,6 +282,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Vote\Models\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>

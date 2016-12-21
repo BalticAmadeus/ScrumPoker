@@ -9,15 +9,34 @@
     function roomService($http, roomId) {
 
         var service = {
-            getRoomData: getRoomData,
             getClients: getClients,
             stopVoting: stopVoting,
-            startVoting: startVoting
+            startVoting: startVoting,
+
+            joinRoom: joinRoom,
+            createRoom: createRoom,
+            getRoom: getRoom
         }
 
         return service;
 
+        function joinRoom(model) {
+
+            return $http.put('./api/room', model);
+        }
+
+        function createRoom() {
+
+            return $http.post('./api/room');
+        }
+
+        function getRoom() {
+
+            return $http.get('./api/room/' + roomId);
+        }
+
         function startVoting(model) {
+
             return $http.post('Room/StartVoting', { model: model });
         }
 
@@ -30,11 +49,6 @@
 
             return $http.post('Room/GetClients', { roomId: roomId });
 
-        }
-
-        function getRoomData() {
-
-            return $http.get('Room/Get/' + roomId);
         }
     }
 

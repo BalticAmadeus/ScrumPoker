@@ -1,33 +1,49 @@
-﻿(function() {
+﻿(function () {
     'use strict';
     angular
         .module('scrumPoker')
         .controller('homeController', homeController);
 
-    homeController.$inject = ['$location', 'homeService'];
+    homeController.$inject = ['$window', 'roomService', 'BaseUrl'];
 
-    function homeController($location, homeService) {
+    function homeController($window, roomService, baseUrl) {
 
         var ctrl = this;
+
+        ctrl.joinRoomErrorMsg = '';
+        ctrl.createRoomErrorMsg = '';
 
         ctrl.joinRoom = joinRoom;
         ctrl.createRoom = createRoom;
 
         function joinRoom(model) {
 
-            homeService.joinRoom(model).then(success, error);
+            roomService.joinRoom(model).then(success, error);
 
             function success(response) {
-                console.log(response);
+
+                var clientId = response.data;
+                $window.location.href = baseUrl + 'Voting/Index/' + clientId;
             }
 
-            function error(response) {
-                console.log(response);
+            function error() {
+                ctrl.joinRoomErrorMsg = 'room not found';
             }
         }
 
         function createRoom() {
-            
+
+            roomService.createRoom().then(success, error);
+
+            function success(response) {
+
+                var roomId = response.data;
+                $window.location.href = baseUrl + 'Room/Index/' + roomId;
+            }
+
+            function error() {
+                ctrl.createRoomErrorMsg = 'failed to create room';
+            }
         }
 
     }

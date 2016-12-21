@@ -17,25 +17,25 @@ namespace BA.ScrumPoker.Controllers
             return View();
         }
 
-		public JsonResult Get(string id)
-		{
-            var room = Rooms.Instance.GetRoom(id);
+		//public JsonResult Get(string id)
+		//{
+  //          var room = Rooms.Instance.GetRoom(id);
 
-			if (room == null)
-			{
-				return new JsonResult()
-				{
-					JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-					Data = new UiResponse<string>("Room not found")
-				};
-			}
+		//	if (room == null)
+		//	{
+		//		return new JsonResult()
+		//		{
+		//			JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+		//			Data = new UiResponse<string>("Room not found")
+		//		};
+		//	}
 
-			return new JsonResult()
-			{
-				JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-				Data = new UiResponse<RoomModel>(room)
-			};
-		}
+		//	return new JsonResult()
+		//	{
+		//		JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+		//		Data = new UiResponse<RoomModel>(room)
+		//	};
+		//}
 
 		public JsonResult StartVoting(RoomModel model)
 		{

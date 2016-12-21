@@ -2,8 +2,13 @@
 {
     @Scripts.Render("~/bundles/angular")
 
-<script type="text/javascript" src="~/Scripts/Modules/homeService.js"></script>
-<script type="text/javascript" src="~/Scripts/Modules/homeController.js"></script>
+    <script>
+        scrumPoker.value('BaseUrl', '@ViewBag.BaseUrl');
+        scrumPoker.value('RoomId', '');
+    </script>
+
+    <script type="text/javascript" src="~/Scripts/Modules/roomService.js"></script>
+    <script type="text/javascript" src="~/Scripts/Modules/homeController.js"></script>
 }
 
 <div class="home-view">
@@ -18,16 +23,17 @@
                 <div class="form-group">
                     <input ng-model="homeCtrl.joinRoomModel.userName" type="text" name="userName" placeholder="User Name" required />
                 </div>
-
+                <p class="text-danger" style="margin: 15px" ng-if="homeCtrl.joinRoomErrorMsg">
+                    {{homeCtrl.joinRoomErrorMsg}}
+                </p>
                 <button type="submit" ng-click="homeCtrl.joinRoom(homeCtrl.joinRoomModel)" class="btn btn-primary btn-lg">Join Room &raquo;</button>
             </form>
-            <p class="text-danger" style="margin-top: 25px"></p>
         </div>
         <div class="create-room">
             <h1>Create you own room</h1>
             <form>
                 <div>
-                    <button type="submit" class="btn btn-primary btn-lg">Create Room &raquo;</button>
+                    <button type="submit" ng-click="homeCtrl.createRoom()" class="btn btn-primary btn-lg">Create Room &raquo;</button>
                 </div>
                 @Html.ValidationMessage("createRoomError")
             </form>

@@ -4,9 +4,9 @@
         .module('scrumPoker')
         .controller('roomController', roomController);
 
-    roomController.$inject = ['$scope', '$timeout', 'roomService', 'RoomId', 'BaseUrl'];
+    roomController.$inject = ['$scope', '$timeout', 'roomService', 'RoomId', 'BaseUrl', 'votingService'];
 
-    function roomController($scope, $timeout, roomService, roomId, baseUrl) {
+    function roomController($scope, $timeout, roomService, roomId, baseUrl, votingService) {
 
         var ctrl = this;
 
@@ -39,11 +39,11 @@
         }
 
         function getRoomData() {
-            roomService.getRoomData().then(success, error);
+            roomService.getRoom().then(success, error);
 
             function success(response) {
 
-                ctrl.ViewModel = response.data.Data;
+                ctrl.ViewModel = response.data;
                 ctrl.dataLoaded = true;
                 updateClients();
             }
@@ -51,7 +51,9 @@
 
         function startVoting() {
 
-            roomService.startVoting(ctrl.ViewModel).then(success, error).finally(afterRequest);
+            votingService.startVoting(roomId).then(success, error).finally(afterRequest);
+
+            //roomService.startVoting(ctrl.ViewModel).then(success, error).finally(afterRequest);
 
             function success(response) {
                 ctrl.ViewModel = response.data.Data;
@@ -75,7 +77,9 @@
 
         function stopVoting() {
 
-            roomService.stopVoting(ctrl.ViewModel).then(success, error).finally(afterRequest);
+            votingService.stopVoting(roomId).then(success, error).finally(afterRequest);
+
+            //roomService.stopVoting(ctrl.ViewModel).then(success, error).finally(afterRequest);
 
             function success(response) {
                 ctrl.ViewModel = response.data.Data;

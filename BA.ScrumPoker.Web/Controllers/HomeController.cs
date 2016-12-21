@@ -1,5 +1,4 @@
-﻿using BA.ScrumPoker.MemoryData;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace BA.ScrumPoker.Controllers
 {
@@ -8,35 +7,12 @@ namespace BA.ScrumPoker.Controllers
 		public ActionResult Index(string roomId)
 		{
             ViewBag.RoomId = roomId;
-            return View();
-		}
+			ViewBag.BaseUrl = 
+				Request.Url.Scheme + "://" + 
+				Request.Url.Authority + 
+				Request.ApplicationPath.TrimEnd('/') + "/";
 
-		[HttpPost]
-		public ActionResult CreateRoom()
-		{
-            var room = Rooms.Instance.CreateRoom();
-
-            if (room == null)
-            {
-                ModelState.AddModelError("createRoomError", "Failed to create the room");
-	            return View("Index");
-			}
-
-			return RedirectToActionPermanent("Index", "Room", new { id = room.RoomId });
-		}
-
-		[HttpPost]
-		public ActionResult Join(string userName, string roomId)
-		{
-            var client = Rooms.Instance.JoinRoom(userName, roomId);
-
-			if (client == null)
-			{
-				ModelState.AddModelError("joinRoomError", "Failed to join the room");
-	            return View("Index");
-			}
-
-			return RedirectToActionPermanent("Index", "Voting", new { id = client.Id });
+			return View();
 		}
 	}
 }
