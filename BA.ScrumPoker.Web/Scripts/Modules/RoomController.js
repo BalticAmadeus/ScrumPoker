@@ -1,137 +1,125 @@
-﻿(function() {
+﻿(function () {
     'use strict';
     angular
         .module('ScrumPoker')
         .controller('RoomController', roomController);
 
-    roomController.$inject = ['$http', '$filter', "$timeout", 'roomService'];
+    roomController.$inject = ["$timeout", 'roomService'];
 
-    function roomController($http, $filter, $timeout, roomService) {
+    function roomController($timeout, roomService) {
 
         var ctrl = this;
 
         ctrl.dirtySetter = false;
         ctrl.dataLoaded = false;
-        ctrl.Errors = [];
+        ctrl.isFlipped = false;
+        ctrl.showOverlay = false;
 
-        ctrl.addError = function (message) {
-            ctrl.Errors.push(
-                {
-                    Content: message
-                }
-            );
-            $timeout(function () {
-                ctrl.Errors.pop();
-            }, 3000);
-        }
+        ctrl.flipMe = flipMe;
 
-        window.onbeforeunload = function (event) {
+        window.onbeforeunload = onbeforeunload;
+
+        getRoomData();
+
+        function onbeforeunload(event) {
+
             var message = 'You are about to close voting room and voting will stop. OK?';
             event.returnValue = message;
+
             return message;
         }
 
-        getRoomData();
+
         function getRoomData() {
-            roomService.getRoomData()
-                .success(function (response) {
-                    ctrl.ViewModel = response.Data;
-                    ctrl.dataLoaded = true;
-                    ctrl.UpdateClients();
-                })
-                .error(function (error) {
-                    ctrl.status = 'Unable to load customer data: ' + error.message;
-                    console.log(ctrl.status);
-                });
+            roomService.getRoomData().then(success, error);
+
+            function success(response) {
+                console.log(response);
+
+                ctrl.ViewModel = response.data.Data;
+                ctrl.dataLoaded = true;
+                updateClients();
+            }
         }
 
-        ctrl.StartVoting = function () {
-            $http.post('Room/StartVoting', { model: ctrl.ViewModel }).success(function (response) {
-                ctrl.ViewModel = response.Data;
+        function startVoting() {
 
-            })
-            .error(function (data, status, headers, config) {
-                ctrl.addError(error);
-            }).finally(function () {
-                ctrl.showOverlay = false;
+            roomService.startVoting(ctrl.ViewModel).then(success, error).finally(afterRequest);
 
-            });
+            function success(response) {
+                ctrl.ViewModel = response.data.Data;
+            }
         }
 
-        ctrl.flipMe = function (varl) {
+        function flipMe(varl) {
 
             setTimeout(function () {
-                ctrl.$apply(function () {
+                $scope.$apply(function () {
                     ctrl.isFlipped = varl;
                 });
             }, 400);
 
-            if (varl)
-                ctrl.StopVoting();
-            else
-                ctrl.StartVoting();
-        }
-
-        ctrl.StopVoting = function () {
-            ctrl.post('Room/StopVoting', { model: ctrl.ViewModel }).success(function (response) {
-                ctrl.ViewModel = response.Data;
-
-
-            })
-            .error(function (data, status, headers, config) {
-                ctrl.addError(error);
-            }).finally(function () {
-                ctrl.showOverlay = false;
-            });
-        }
-
-        ctrl.ifServiceCallFailed = function (data) {
-            if (data.Error) {
-                if (data.Error.HasError) {
-                    ctrl.addError(data.Error.Message);
-                    return true;
-                }
+            if (varl) {
+                stopVoting();
+            } else {
+                startVoting();
             }
-            return false;
         }
 
+        function stopVoting() {
 
-        ctrl.UpdateClients = function () {
+            roomService.stopVoting(ctrl.ViewModel).then(success, error).finally(afterRequest);
+
+            function success(response) {
+                ctrl.ViewModel = response.data.Data;
+            }
+        }
+
+        function updateClients() {
+
             setTimeout(function () {
-                ctrl.UpdateClientsRequest();
+                updateClientsRequest();
             }, 2000);
         }
 
-        var findOrUpdate = function (client) {
+        function findOrUpdate(client) {
+
             for (var i = 0; i < ctrl.ViewModel.Clients.length; i++) {
-                if (ctrl.ViewModel.Clients[i].Id == client.Id) {
+                if (ctrl.ViewModel.Clients[i].Id === client.Id) {
                     ctrl.ViewModel.Clients[i].VoteValue = client.VoteValue;
                     ctrl.ViewModel.Clients[i].IHaveVoted = client.IHaveVoted;
                     return ctrl.ViewModel.Clients[i];
                 }
-
             }
+
             return null;
         };
 
-        ctrl.UpdateClientsRequest = function () {
-            $http.post('Room/GetClients', { roomId: ctrl.ViewModel.RoomId }).success(function (response) {
-                for (var i = 0 ; i < response.Data.length; i++) {
-                    var inArray = findOrUpdate(response.Data[i]);
-                    if (!inArray)
-                        ctrl.ViewModel.Clients.push(response.Data[i]);
+        function updateClientsRequest() {
+
+            var roomId = ctrl.ViewModel.RoomId;
+
+            roomService.getClients(roomId).then(success, error).finally(afterRequest);
+
+            function success(response) {
+
+                for (var i = 0 ; i < response.data.Data.length; i++) {
+                    var inArray = findOrUpdate(response.data.Data[i]);
+                    if (!inArray) {
+                        ctrl.ViewModel.Clients.push(response.data.Data[i]);
+                    }
                 }
 
-                ctrl.UpdateClients();
-
-            })
-            .error(function (data, status, headers, config) {
-                ctrl.addError(error);
-            }).finally(function () {
-                ctrl.showOverlay = false;
-            });
+                updateClients();
+            }
         }
 
-    }
+        function error(response) {
+            console.log(response);
+        }
 
+        function afterRequest() {
+            ctrl.showOverlay = false;
+        }
+    }
 })();

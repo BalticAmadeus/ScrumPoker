@@ -19,7 +19,7 @@
     <div ng-controller="QrController as qrctrl">
         <div id="room-view" ng-controller="RoomController as roomCtrl">
             <div class="page-header">
-                <h1 class="room-number">Room ID: {{roomCtrl.ViewModel.RoomId}}</h1>
+                <h1 class="room-number" ng-cloak>Room ID: {{roomCtrl.ViewModel.RoomId}}</h1>
                 <div class="qr-button-container">
                     <button class="btn btn-primary btn-lg show-qr-button" ng-click="qrctrl.changeQrState()" ng-cloak>{{qrctrl.showQr ? 'Hide QR Code' : 'Show QR Code'}}</button>
                 </div>
@@ -33,7 +33,7 @@
 
                         <div class="client-header" ng-class="{'voted':client.IHaveVoted}">{{client.Name}}</div>
 
-                        <div class="vote-container" ng-click="roomCtrl.flipMe(!isFlipped)">
+                        <div class="vote-container" ng-click="roomCtrl.flipMe(!roomCtrl.isFlipped)">
                             <div class="vote-card" ng-show="roomCtrl.isFlipped">
                                 <div class="card-face">
                                     {{client.VoteValue}}
