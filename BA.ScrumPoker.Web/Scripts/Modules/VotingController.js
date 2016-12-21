@@ -4,29 +4,31 @@
         .module('ScrumPoker')
         .controller('VotingController', votingController);
 
-    votingController.$inject = ['$scope', '$http', '$filter', "$timeout", 'votingService'];
+    votingController.$inject = ['$http', '$filter', "$timeout", 'votingService'];
 
-    function votingController($scope, $http, $filter, $timeout, votingService) {
+    function votingController($http, $filter, $timeout, votingService) {
 
-        $scope.dirtySetter = false;
-        $scope.dataLoaded = false;
+        var ctrl = this;
 
-        $scope.Errors = [];
+        ctrl.dirtySetter = false;
+        ctrl.dataLoaded = false;
 
-        $scope.SetMyVote = setMyVote;
-        $scope.ifServiceCallFailed = ifServiceCallFailed;
-        $scope.UpdateClientRequest = updateClientRequest;
-        $scope.UpdateClient = updateClient;
-        $scope.addError = addError;
+        ctrl.Errors = [];
+
+        ctrl.SetMyVote = setMyVote;
+        ctrl.ifServiceCallFailed = ifServiceCallFailed;
+        ctrl.UpdateClientRequest = updateClientRequest;
+        ctrl.UpdateClient = updateClient;
+        ctrl.addError = addError;
 
         function addError(message) {
-            $scope.Errors.push(
+            ctrl.Errors.push(
                 {
                     Content: message
                 }
             );
             $timeout(function () {
-                $scope.Errors.pop();
+                ctrl.Errors.pop();
             }, 3000);
         }
 
@@ -37,39 +39,39 @@
             votingService.getVotingData()
                 .success(function (response) {
 
-                    $scope.ViewModel = response.Data;
-                    $scope.dataLoaded = true;
+                    ctrl.ViewModel = response.Data;
+                    ctrl.dataLoaded = true;
                     updateClient();
                 })
                 .error(function (error) {
 
-                    $scope.status = 'Unable to load customer data: ' + error.message;
-                    console.log($scope.status);
+                    ctrl.status = 'Unable to load customer data: ' + error.message;
+                    console.log(ctrl.status);
                 });
         }
 
         function setMyVote(number) {
 
-            if (!$scope.ViewModel.CanIVote) {
+            if (!ctrl.ViewModel.CanIVote) {
                 return;
             }
 
-            $scope.ViewModel.Client.VoteValue = number;
+            ctrl.ViewModel.Client.VoteValue = number;
 
-            $http.post('Voting/Vote', { model: $scope.ViewModel.Client }).success(function (response) {
+            $http.post('Voting/Vote', { model: ctrl.ViewModel.Client }).success(function (response) {
 
                 if (ifServiceCallFailed(response)) {
                     return;
                 }
 
-                $scope.ViewModel.Client = response.Data;
+                ctrl.ViewModel.Client = response.Data;
             })
             .error(function (data, status, headers, config) {
 
                 addError(error);
             }).finally(function () {
 
-                $scope.showOverlay = false;
+                ctrl.showOverlay = false;
             });
 
         }
@@ -97,15 +99,15 @@
 
         function updateClientRequest() {
 
-            $http.post('Voting/GetUpdates', { model: $scope.ViewModel.Client }).success(function (response) {
+            $http.post('Voting/GetUpdates', { model: ctrl.ViewModel.Client }).success(function (response) {
 
                 if (ifServiceCallFailed(response)) {
                     updateClient();
                     return;
                 }
 
-                $scope.ViewModel.Client = response.Data.Client
-                $scope.ViewModel.CanIVote = response.Data.CanIVote;
+                ctrl.ViewModel.Client = response.Data.Client
+                ctrl.ViewModel.CanIVote = response.Data.CanIVote;
                 UpdateClient();
 
             })
@@ -114,7 +116,7 @@
                 addError(error);
             }).finally(function () {
 
-                $scope.showOverlay = false;
+                ctrl.showOverlay = false;
             });
         }
 
