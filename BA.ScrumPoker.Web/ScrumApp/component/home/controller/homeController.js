@@ -8,7 +8,7 @@
 
     function homeController($localStorage, $window, baseUrl, homeService, storageService) {
 
-        //storageService.clearRoom(); todo uncoment later
+        //homeService.clear(); todo uncoment later
 
         var ctrl = this;
 
@@ -24,11 +24,11 @@
 
             function success(response) {
 
-                var clientId = response.data;
+                var client = response.data;
 
-                storageService.setClient(clientId);
+                storageService.saveClient(client.RoomId, client.ClientId);
 
-                $window.location.href = baseUrl + 'Voting/Index/' + clientId;
+                $window.location.href = baseUrl + 'Voting/Index/' + client.ClientId;
             }
 
             function error() {
@@ -44,7 +44,7 @@
 
                 var roomId = response.data;
 
-                storageService.setRoom(roomId);
+                storageService.saveRoom(roomId);
 
                 $window.location.href = baseUrl + 'Room/Index/' + roomId;
             }

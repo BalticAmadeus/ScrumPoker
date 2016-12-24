@@ -4,12 +4,12 @@
         .module('scrumPoker')
         .controller('roomController', roomController);
 
-    roomController.$inject = ['$scope', '$timeout', 'BaseUrl', 'roomService', 'votingService', 'stuffService'];
+    roomController.$inject = ['$scope', '$timeout', 'BaseUrl', 'roomService', 'storageService'];
 
-    function roomController($scope, $timeout, baseUrl, roomService, votingService, stuffService) {
+    function roomController($scope, $timeout, baseUrl, roomService, storageService) {
 
-        var roomId = stuffService.getRoom();
-
+        var roomId = storageService.getRoom();
+        var secretKey = '';
         var ctrl = this;
 
         ctrl.isFlipped = false;
@@ -70,19 +70,17 @@
 
         function startVoting() {
 
-            votingService.startVoting(roomId).then(success, error).finally(afterRequest);
+            roomService.startVoting(roomId, secretKey).then(success, error);
 
             function success(response) {
-                ctrl.ViewModel = response.data.Data;
             }
         }
 
         function stopVoting() {
 
-            votingService.stopVoting(roomId).then(success, error).finally(afterRequest);
+            roomService.stopVoting(roomId, secretKey).then(success, error);
 
             function success(response) {
-                ctrl.ViewModel = response.data.Data;
             }
         }
 

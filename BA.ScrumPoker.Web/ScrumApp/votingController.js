@@ -4,7 +4,7 @@
         .module('scrumPoker')
         .controller('votingController', votingController);
 
-    votingController.$inject = ['$http', '$filter', '$timeout', 'votingService', 'stuffService', 'clientService'];
+    votingController.$inject = ['$http', '$filter', '$timeout', 'votingService', 'storageService', 'clientService'];
 
     function votingController($http, $filter, $timeout, votingService, stuffService, clientService) {
 
@@ -25,14 +25,13 @@
 
         ctrl.addError = addError;
 
+        var client = stuffService.getClient();
 
-        var clientId = stuffService.getClient();
-
-        ctrl.clientId = clientId; // delete later
+        ctrl.clientId = client.clientId;
+        ctrl.roomId = client.roomId;
 
         ctrl.votes = {};
         ctrl.canVote = null;
-        ctrl.roomId = null;
 
         ctrl.vote = vote;
 

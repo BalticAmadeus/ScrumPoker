@@ -1,47 +1,38 @@
 ﻿@section scripts
 {
-    @Scripts.Render("~/bundles/angular")
     <script>
-        scrumPoker.value('RoomId', '@ViewBag.RoomId');
-        scrumPoker.value('BaseUrl', '@ViewBag.BaseUrl');
-        scrumPoker.value('ClientId', '');
+        scrumPoker.value('BaseUrl', '@ViewBag.BaseUrl'); // todo remove later
     </script>
-
-<script type="text/javascript" src="~/Scripts/Modules/roomService.js"></script>
-<script type="text/javascript" src="~/Scripts/Modules/votingService.js"></script>
-    <script type="text/javascript" src="~/Scripts/Modules/roomController.js"></script>
-}
-
-@section HeaderScripts
-{
-    @Styles.Render("~/Room/css")
 }
 
 <div>
     <div ng-controller="roomController as roomCtrl">
+
         <div id="room-view">
             <div class="page-header">
-                <h1 class="room-number" ng-cloak>Room ID: {{roomCtrl.ViewModel.RoomId}}</h1>
+
+                <h1 class="room-number" ng-cloak>Room ID: {{roomCtrl.roomId}}</h1>
                 <div class="qr-button-container">
-                    <button class="btn btn-primary btn-lg show-qr-button" ng-click="roomCtrl.changeQrState()" ng-cloak>{{roomCtrl.showQr ? 'Hide QR Code' : 'Show QR Code'}}</button>
+                    <button class="btn btn-primary btn-lg show-qr-button" ng-click="roomCtrl.showHideQr()" ng-cloak>{{roomCtrl.showQr ? 'Hide QR Code' : 'Show QR Code'}}</button>
                 </div>
+
             </div>
-            <div class="container ng-hide" ng-show="roomCtrl.dataLoaded">
+            <div class="container ng-hide" ng-show="roomCtrl.Votes">
                 <div class="text-centered">
-
                 </div>
-                <div class="row" ng-show="!roomCtrl.showQr">
-                    <div class="client-entry" ng-repeat="client in roomCtrl.ViewModel.Clients">
 
-                        <div class="client-header" ng-class="{'voted':client.IHaveVoted}">{{client.Name}}</div>
+                <div class="row" ng-show="!roomCtrl.showQr">
+                    <div class="client-entry" ng-repeat="vote in roomCtrl.Votes">
+
+                        <div class="client-header" ng-class="{'voted':vote.VoteValue}">{{vote.Name}}</div>
 
                         <div class="vote-container" ng-click="roomCtrl.flipMe(!roomCtrl.isFlipped)">
                             <div class="vote-card" ng-show="roomCtrl.isFlipped">
                                 <div class="card-face">
-                                    {{client.VoteValue}}
+                                    {{vote.VoteValue}}
                                 </div>
                             </div>
-                            <div class="vote-card" ng-hide="roomCtrl.isFlipped">
+                            <div class="vote-card" ng-show="!roomCtrl.isFlipped">
                                 <div class="card-back"></div>
                             </div>
                         </div>
@@ -50,6 +41,7 @@
                 </div>
             </div>
         </div>
+
         <div class="text-centered" ng-show="roomCtrl.showQr" ng-cloak>
             <div class="qr-container">
                 <qrcode data="{{roomCtrl.roomUrl}}"

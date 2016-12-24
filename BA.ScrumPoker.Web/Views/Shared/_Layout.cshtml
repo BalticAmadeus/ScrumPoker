@@ -7,8 +7,7 @@
     <base href="@((Request.ApplicationPath.EndsWith("/")) ? Request.ApplicationPath : Request.ApplicationPath + "/")" />
 
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-	@RenderSection("HeaderScripts", false)
+    @RenderSection("HeaderScripts", false)
 </head>
 <body ng-app="scrumPoker">
    
@@ -16,6 +15,10 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/app")
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

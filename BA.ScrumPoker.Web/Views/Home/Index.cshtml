@@ -1,14 +1,8 @@
 ﻿@section scripts
 {
-    @Scripts.Render("~/bundles/angular")
-
     <script>
         scrumPoker.value('BaseUrl', '@ViewBag.BaseUrl');
-        scrumPoker.value('RoomId', '');
     </script>
-
-    <script type="text/javascript" src="~/Scripts/Modules/roomService.js"></script>
-    <script type="text/javascript" src="~/Scripts/Modules/homeController.js"></script>
 }
 
 <div class="home-view">
@@ -21,7 +15,7 @@
                     <input ng-model="homeCtrl.joinRoomModel.roomId" type="text" name="roomId" placeholder="Room Number" required value="@ViewBag.RoomId" />
                 </div>
                 <div class="form-group">
-                    <input ng-model="homeCtrl.joinRoomModel.userName" type="text" name="userName" placeholder="User Name" required />
+                    <input ng-model="homeCtrl.joinRoomModel.username" type="text" name="userName" placeholder="User Name" required />
                 </div>
                 <p class="text-danger" style="margin: 15px" ng-if="homeCtrl.joinRoomErrorMsg">
                     {{homeCtrl.joinRoomErrorMsg}}
@@ -35,7 +29,6 @@
                 <div>
                     <button type="submit" ng-click="homeCtrl.createRoom()" class="btn btn-primary btn-lg">Create Room &raquo;</button>
                 </div>
-                @Html.ValidationMessage("createRoomError")
             </form>
             <div class="source-link">
                 <a href="https://github.com/BalticAmadeus/ScrumPoker"><img src="~/Content/Images/GitHub-Mark-Light-32px.png"></a> Join us on <a href="https://github.com/BalticAmadeus/ScrumPoker">GitHub</a> to improve this solution.

@@ -154,5 +154,28 @@ namespace BA.ScrumPoker.MemoryData
             }
         }
 
-    }
+	    public ClientModel Vote(int clientId, int voteValue)
+	    {
+			lock (_sync)
+			{
+				ClientModel client;
+				if (!_clients.TryGetValue(clientId, out client))
+					return null;
+				client.VoteValue = voteValue;
+				return client;
+			}
+		}
+
+		public bool CanVote(string roomId)
+		{
+			lock (_sync)
+			{
+				RoomModel room;
+				if (!_rooms.TryGetValue(roomId, out room))
+					return false;
+				return room.CanVote;
+			}
+		}
+
+	}
 }

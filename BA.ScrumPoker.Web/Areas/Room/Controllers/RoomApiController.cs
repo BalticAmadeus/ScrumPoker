@@ -1,39 +1,13 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using BA.ScrumPoker.Areas.Room.Models;
 using BA.ScrumPoker.MemoryData;
+using System.Linq;
 
 namespace BA.ScrumPoker.Areas.Room.Controllers
 {
 	public class RoomApiController : ApiController
 	{
-
-		[HttpPut]
-		[Route("api/Room")]
-		public IHttpActionResult Room(JoinRoomModel model)
-		{
-			var client = Rooms.Instance.JoinRoom(model.Username, model.RoomId);
-
-			if (client == null)
-			{
-				return NotFound();
-			}
-
-			return Ok(client.Id);
-		}
-
-		[HttpPost]
-		[Route("api/Room")]
-		public IHttpActionResult Room()
-		{
-			var room = Rooms.Instance.CreateRoom();
-
-			if (room == null)
-			{
-				return BadRequest();
-			}
-
-			return Ok(room.RoomId);
-		}
 
 		[HttpGet]
 		[Route("api/Room/{roomId}")]
@@ -46,7 +20,48 @@ namespace BA.ScrumPoker.Areas.Room.Controllers
 				return NotFound();
 			}
 
-			return Ok(room);
+			var roomModel = new RoomItemModel // todo move to model -> convert method
+			{
+				CanVote = room.CanVote,
+				Votes = room.Clients.Select(item => new VoteModel
+				{
+					Id = item.Id,
+					Name = item.Name,
+					VoteValue = item.VoteValue
+				}).ToList()
+			};
+
+			return Ok(roomModel);
+		}
+
+		[HttpPost]
+		[Route("api/room/stopVoting")]
+		public IHttpActionResult StopVoting(RoomModel model)
+		{
+			try
+			{
+				Rooms.Instance.StopVoting(model.RoomId);
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest();
+			}
+		}
+
+		[HttpPost]
+		[Route("api/room/startVoting")]
+		public IHttpActionResult StartVoting(RoomModel model)
+		{
+			try
+			{
+				Rooms.Instance.StartVoting(model.RoomId);
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest();
+			}
 		}
 	}
 }

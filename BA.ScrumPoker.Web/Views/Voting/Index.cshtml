@@ -1,39 +1,20 @@
-﻿@section scripts
-{
-    @Scripts.Render("~/bundles/angular")
-    <script>
-        scrumPoker.value('ClientId', @ViewBag.ClientId);
-    </script>
-    <script type="text/javascript" src="~/Scripts/Modules/votingService.js"></script>
-    <script type="text/javascript" src="~/Scripts/Modules/votingController.js"></script>
-}
-@section HeaderScripts
-{
-    @Styles.Render("~/Voting/css")
-}
-
-<div id="voting-view" ng-controller="votingController as votingCtrl">
-    <div class="ng-hide" ng-show="votingCtrl.dataLoaded">
-
-        <div class="page-header">
-            <h1 class="room-number">Room number: {{votingCtrl.ViewModel.Client.RoomId}}</h1>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="vote-container" ng-repeat="selection in votingCtrl.ViewModel.VotingConfiguration.Selection" ng-click="votingCtrl.SetMyVote(selection.Number)">
-                    <div class="vote-card" ng-show="votingCtrl.ViewModel.CanIVote" ng-class="{'selected-card': selection.Number == votingCtrl.ViewModel.Client.VoteValue}">
-                        <div class="card-face">
-                            {{selection.Number}}
-                        </div>
+﻿<div id="voting-view" ng-controller="votingController as votingCtrl">
+    <div class="page-header">
+        <h1 class="room-number">Room number: {{votingCtrl.roomId}}</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="vote-container" ng-repeat="selection in votingCtrl.votes" ng-click="votingCtrl.vote(selection.Number)">
+                <div class="vote-card" ng-show="votingCtrl.canVote" ng-class="{'selected-card': selection.Selected}">
+                    <div class="card-face">
+                        {{selection.Number}}
                     </div>
-                    <div class="vote-card" ng-hide="votingCtrl.ViewModel.CanIVote">
-                        <div class="card-back"></div>
-                    </div>
+                </div>
+                <div class="vote-card" ng-show="!votingCtrl.canVote">
+                    <div class="card-back"></div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 

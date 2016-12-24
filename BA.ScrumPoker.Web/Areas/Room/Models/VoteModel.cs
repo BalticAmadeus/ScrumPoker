@@ -5,10 +5,10 @@ using System.Web;
 
 namespace BA.ScrumPoker.Areas.Room.Models
 {
-	public class JoinRoomModel
+	public class VoteModel
 	{
-		public string Username { get; set; }
-
-		public string RoomId { get; set; }
+		public int Id { get; set; }
+		public string Name { get; set; }
+		public int? VoteValue { get; set; }
 	}
 }

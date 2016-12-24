@@ -25,6 +25,20 @@ namespace BA.ScrumPoker.Areas.Vote.Controllers
 			return Voting(room);
 		}
 
+		[HttpPost]
+		[Route("api/Vote")]
+		public IHttpActionResult Vote(ClientModel model)
+		{
+			ClientModel client = Rooms.Instance.Vote(model);
+
+			if (client == null)
+			{
+				return BadRequest();
+			}
+
+			return Ok(client);
+		}
+
 		private IHttpActionResult Voting(RoomModel room)
 		{
 			if (room == null)

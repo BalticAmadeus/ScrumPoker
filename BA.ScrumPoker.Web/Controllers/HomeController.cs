@@ -4,9 +4,9 @@ namespace BA.ScrumPoker.Controllers
 {
 	public class HomeController : Controller
 	{
-		public ActionResult Index(string roomId)
+		public ActionResult Index()
 		{
-            ViewBag.RoomId = roomId;
+
 			ViewBag.BaseUrl = 
 				Request.Url.Scheme + "://" + 
 				Request.Url.Authority + 

@@ -4,11 +4,13 @@
         .module('scrumPoker')
         .factory('roomService', roomService);
 
-    roomService.$inject = ['$http', 'RoomId'];
+    roomService.$inject = ['$http'];
 
-    function roomService($http, roomId) {
+    function roomService($http) {
 
         var service = {
+            getRoomInfo: getRoom,
+
             getClients: getClients,
             stopVoting: stopVoting,
             startVoting: startVoting,
@@ -30,7 +32,7 @@
             return $http.post('./api/room');
         }
 
-        function getRoom() {
+        function getRoom(roomId) {
 
             return $http.get('./api/room/' + roomId);
         }
