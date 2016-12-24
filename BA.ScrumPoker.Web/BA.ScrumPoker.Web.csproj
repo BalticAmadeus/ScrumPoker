@@ -265,15 +265,6 @@
     <Content Include="Scripts\loading-bar.js" />
     <Content Include="Scripts\loading-bar.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\Modules\app.js" />
-    <Content Include="Scripts\Modules\clientService.js" />
-    <Content Include="Scripts\Modules\homeController.js" />
-    <Content Include="Scripts\Modules\homeService.js" />
-    <Content Include="Scripts\Modules\roomController.js" />
-    <Content Include="Scripts\Modules\roomService.js" />
-    <Content Include="Scripts\Modules\stuffService.js" />
-    <Content Include="Scripts\Modules\votingController.js" />
-    <Content Include="Scripts\Modules\votingService.js" />
     <Content Include="Scripts\ngStorage.js" />
     <Content Include="Scripts\ngStorage.min.js" />
     <Content Include="Scripts\respond.js" />
