@@ -8,6 +8,19 @@ namespace BA.ScrumPoker.Areas.Room.Controllers
 {
 	public class RoomApiController : ApiController
 	{
+		[HttpPost]
+		[Route("api/Room/Kick")]
+		public IHttpActionResult Kick(KickModel model)
+		{
+			var kicked = Rooms.Instance.Kick(model.RoomId, model.ClientId);
+
+			if (kicked)
+			{
+				return Ok();
+			}
+
+			return BadRequest();
+		}
 
 		[HttpGet]
 		[Route("api/Room/{roomId}")]
@@ -20,15 +33,25 @@ namespace BA.ScrumPoker.Areas.Room.Controllers
 				return NotFound();
 			}
 
+			var voters = room.Clients?.Select(item => new VoteModel
+			{
+				Id = item.Id,
+				Name = item.Name,
+				VoteValue = item.VoteValue
+			}).ToList();
+
+			double? avgScore = null;
+
+			if (voters != null && voters.Any())
+			{
+				avgScore = voters.Where(x => x.VoteValue.HasValue).Average(x => x.VoteValue.Value);
+			}
+
 			var roomModel = new RoomItemModel // todo move to model -> convert method
 			{
 				CanVote = room.CanVote,
-				Votes = room.Clients.Select(item => new VoteModel
-				{
-					Id = item.Id,
-					Name = item.Name,
-					VoteValue = item.VoteValue
-				}).ToList()
+				AvgScore = avgScore,
+				Voters = voters
 			};
 
 			return Ok(roomModel);

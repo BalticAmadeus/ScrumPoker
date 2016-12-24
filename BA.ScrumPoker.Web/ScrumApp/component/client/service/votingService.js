@@ -10,23 +10,10 @@
 
         var service = {
             getVotingData: getVotingData,
-
-            startVoting: startVoting,
-            stopVoting: stopVoting,
             Vote: vote
         }
 
         return service;
-
-        function startVoting(roomId) {
-
-            return $http.post('./api/StartVoting', { roomId: roomId });
-        }
-
-        function stopVoting(roomId) {
-
-            return $http.post('./api/StopVoting', { roomId: roomId });
-        }
 
         function vote(data) {
 

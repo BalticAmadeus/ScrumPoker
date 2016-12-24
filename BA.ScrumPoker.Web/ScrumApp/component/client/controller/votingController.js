@@ -6,7 +6,7 @@
 
     votingController.$inject = ['$http', '$filter', '$timeout', 'votingService', 'storageService', 'clientService'];
 
-    function votingController($http, $filter, $timeout, votingService, stuffService, clientService) {
+    function votingController($http, $filter, $timeout, votingService, storageService, clientService) {
 
         var ctrl = this;
 
@@ -25,7 +25,7 @@
 
         ctrl.addError = addError;
 
-        var client = stuffService.getClient();
+        var client = storageService.getClient();
 
         ctrl.clientId = client.clientId;
         ctrl.roomId = client.roomId;

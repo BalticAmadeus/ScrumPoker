@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Web;
 
 namespace BA.ScrumPoker.Utilities
 {
@@ -14,7 +11,7 @@ namespace BA.ScrumPoker.Utilities
         {
             var sb = new StringBuilder();
 
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
                 sb.Append(Chars[rng.Next(0,36)]);
             }

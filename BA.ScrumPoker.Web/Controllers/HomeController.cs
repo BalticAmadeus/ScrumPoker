@@ -6,7 +6,6 @@ namespace BA.ScrumPoker.Controllers
 	{
 		public ActionResult Index()
 		{
-
 			ViewBag.BaseUrl = 
 				Request.Url.Scheme + "://" + 
 				Request.Url.Authority + 

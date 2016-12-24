@@ -15,7 +15,10 @@
 
         ctrl.isFlipped = false;
         ctrl.showQr = false;
-        ctrl.Votes = {};
+        ctrl.model = {
+            voters: {},
+            avgScore: null
+        };
 
         ctrl.roomId = roomId;
         ctrl.roomUrl = baseUrl + '?roomId=' + roomId;
@@ -24,6 +27,7 @@
 
         ctrl.showHideQr = showHideQr;
         ctrl.flipMe = flipMe;
+        ctrl.kickClient = kickClient;
 
         function showHideQr() {
             ctrl.showQr = !ctrl.showQr;
@@ -45,7 +49,8 @@
 
                 function success(response) {
 
-                    ctrl.Votes = response.data.Votes;
+                    ctrl.model.avgScore = response.data.avgScore;
+                    ctrl.model.voters = response.data.Votes;
 
                     loadRoomInfo(roomId);
                 }
@@ -65,11 +70,21 @@
             }
         }
 
+        function kickClient(clientId) {
+
+            roomService.kickClient(roomId, clientId, secretKey).then(success, error);
+
+            function success(response) {
+                // todo
+            }
+        }
+
         function startVoting() {
 
             roomService.startVoting(roomId, secretKey).then(success, error);
 
             function success(response) {
+                // todo
             }
         }
 
@@ -78,6 +93,7 @@
             roomService.stopVoting(roomId, secretKey).then(success, error);
 
             function success(response) {
+                // todo
             }
         }
 

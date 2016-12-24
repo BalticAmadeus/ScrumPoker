@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-
-namespace BA.ScrumPoker.Models
+﻿namespace BA.ScrumPoker.Models
 {
     public class ClientModel
     {
-        [Required]
-        public string Name { get; set; }
-        [Required]
+		public int Id { get; set; }
+		public string Name { get; set; }
         public string RoomId { get; set; }
-
         public int? VoteValue { get; set; }
 
         public bool IHaveVoted
@@ -27,6 +19,5 @@ namespace BA.ScrumPoker.Models
             }
         }
 
-        public int Id { get; set; }
     }
 }

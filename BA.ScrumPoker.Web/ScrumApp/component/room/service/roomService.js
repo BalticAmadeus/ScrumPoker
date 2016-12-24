@@ -11,7 +11,8 @@
         var service = {
             getRoomInfo: getRoomInfo,
             startVoting: startVoting,
-            stopVoting: stopVoting
+            stopVoting: stopVoting,
+            kickClient: kickClient
         }
 
         return service;
@@ -19,6 +20,13 @@
         function getRoomInfo(roomId) {
 
             return $http.get('./api/room/' + roomId);
+        }
+
+        function kickClient(roomId, clientId, secretKey) {
+
+            var requestModel = { RoomId: roomId, ClientId: clientId };
+
+            return $http.post('./api/room/kick', requestModel);
         }
 
         function startVoting(roomId, secretKey) {
