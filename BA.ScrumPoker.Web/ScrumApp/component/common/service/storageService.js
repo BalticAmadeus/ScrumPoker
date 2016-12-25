@@ -39,14 +39,22 @@
         function clear() {
             delete $localStorage.roomId;
             delete $localStorage.clientId;
+            delete $localStorage.secretKey;
         }
 
-        function saveRoom(roomId) {
+        function saveRoom(roomId, secretKey) {
             $localStorage.roomId = roomId;
+            $localStorage.secretKey = secretKey;
         }
 
         function getRoom() {
-            return $localStorage.roomId;
+
+            var room = {
+                roomId: $localStorage.roomId,
+                secretKey: $localStorage.secretKey
+            };
+
+            return room;
         }
     }
 })();

@@ -1,7 +1,7 @@
 ﻿using BA.ScrumPoker.MemoryData;
 using System.Collections.Generic;
 using System.Web.Http;
-using BA.ScrumPoker.Areas.Client.Models;
+using BA.ScrumPoker.Models;
 
 namespace BA.ScrumPoker.Areas.Client.Controllers
 {
@@ -12,14 +12,19 @@ namespace BA.ScrumPoker.Areas.Client.Controllers
 		[Route("api/client/vote")]
 		public IHttpActionResult Client(ClientModel model)
 		{
-			var canVote = Rooms.Instance.CanVote(model.RoomId);
+			var canVote = RoomsTheBetterOne.Instance.CanVote(model.RoomId);
 
 			if (!canVote)
 			{
 				return Ok(); // todo return client data
 			}
 
-			var client = Rooms.Instance.Vote(model.ClientId, model.Number);
+			if (!model.VoteValue.HasValue)
+			{
+				return BadRequest();
+			}
+
+			var client = RoomsTheBetterOne.Instance.Vote(model.RoomId, model.ClientId, model.VoteValue.Value);
 
 			if (client == null)
 			{
@@ -30,34 +35,33 @@ namespace BA.ScrumPoker.Areas.Client.Controllers
 		}
 
 		[HttpGet]
-		[Route("api/client/{clientId}")]
-		public IHttpActionResult Client(int clientId)
+		[Route("api/client/{roomId}/{clientId}")]
+		public IHttpActionResult Client(string roomId, int clientId)
 		{
-			var client = Rooms.Instance.GetClient(clientId);
+			var client = RoomsTheBetterOne.Instance.GetClient(roomId, clientId);
 
 			if (client == null)
 			{
 				return BadRequest();
 			}
 
-			var canVote = Rooms.Instance.CanVote(client.RoomId);
+			var canVote = RoomsTheBetterOne.Instance.CanVote(client.RoomId);
 
-			var clientItemModel = new List<ClientItemModel>();
+			var clientItemModel = new List<VoteItemModel>();
 
 			foreach (var item in GetFibonacci())
 			{
-				clientItemModel.Add(new ClientItemModel
+				clientItemModel.Add(new VoteItemModel
 				{
 					Number = item,
-					Selected = client.IHaveVoted && client.VoteValue.HasValue && client.VoteValue.Value == item
+					Selected = client.Voted && client.VoteValue.HasValue && client.VoteValue.Value == item
 				});
 			}
 
-			var clientModel = new ClientDetailsModel
+			var clientModel = new VoteModel
 			{
 				CanVote = canVote,
 				Items = clientItemModel,
-				RoomId = client.RoomId
 			};
 
 			return Ok(clientModel);

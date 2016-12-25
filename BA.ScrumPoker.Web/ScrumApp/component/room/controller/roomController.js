@@ -8,8 +8,10 @@
 
     function roomController(baseUrl, roomService, storageService) {
 
-        var roomId = storageService.getRoom();
-        var secretKey = ''; // todo implement this stuff
+        var room = storageService.getRoom();
+
+        var roomId = room.roomId;
+        var secretKey = room.secretKey; // todo implement this stuff
 
         var ctrl = this;
 
@@ -33,7 +35,7 @@
             ctrl.showQr = !ctrl.showQr;
         }
 
-        loadRoomInfo(roomId);
+        loadRoomInfo(roomId, secretKey);
 
         function onbeforeunload(event) {
 
@@ -43,19 +45,19 @@
             return message;
         }
 
-        function loadRoomInfo(roomId) {
+        function loadRoomInfo(roomId, secretKey) {
 
             setTimeout(function () {
 
                 function success(response) {
 
-                    ctrl.model.avgScore = response.data.avgScore;
-                    ctrl.model.voters = response.data.Votes;
+                    ctrl.model.avgScore = response.data.AvgScore;
+                    ctrl.model.clients = response.data.Clients;
 
-                    loadRoomInfo(roomId);
+                    loadRoomInfo(roomId, secretKey);
                 }
 
-                roomService.getRoomInfo(roomId).then(success, error);
+                roomService.getRoomInfo(roomId, secretKey).then(success, error);
             }, 2000);
         }
 

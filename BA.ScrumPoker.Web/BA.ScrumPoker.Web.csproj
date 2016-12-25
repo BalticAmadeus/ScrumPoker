@@ -195,27 +195,24 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Client\Controllers\ClientApiController.cs" />
-    <Compile Include="Areas\Client\Models\ClientDetailsModel.cs" />
-    <Compile Include="Areas\Client\Models\ClientItemModel.cs" />
-    <Compile Include="Areas\Client\Models\ClientModel.cs" />
+    <Compile Include="Models\VoteModel.cs" />
+    <Compile Include="Models\VoteItemModel.cs" />
     <Compile Include="Areas\Home\Controllers\HomeApiController.cs" />
-    <Compile Include="Areas\Home\Models\ClientModel.cs" />
     <Compile Include="Areas\Room\Controllers\RoomApiController.cs" />
-    <Compile Include="Areas\Home\Models\JoinRoomModel.cs" />
-    <Compile Include="Areas\Room\Models\KickModel.cs" />
-    <Compile Include="Areas\Room\Models\RoomModel.cs" />
-    <Compile Include="Areas\Room\Models\VoteModel.cs" />
-    <Compile Include="Areas\Room\Models\RoomItemModel.cs" />
-    <Compile Include="Areas\Vote\Controllers\VoteApiController.cs" />
+    <Compile Include="Models\JoinRoomModel.cs" />
+    <Compile Include="Models\KickClientModel.cs" />
+    <Compile Include="Models\RoomModel.cs" />
+    <Compile Include="Models\ClientModel.cs" />
+    <Compile Include="Models\RoomItemModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\VotingController.cs" />
+    <Compile Include="Entities\Client.cs" />
+    <Compile Include="Entities\Room.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="MemoryData\Rooms.cs" />
-    <Compile Include="Models\ClientModel.cs" />
-    <Compile Include="Models\RoomModel.cs" />
+    <Compile Include="MemoryData\RoomsTheBetterOne.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\ClientHub.cs" />
     <Compile Include="Startup.cs" />
@@ -269,14 +266,13 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="ScrumApp\App.js" />
-    <Content Include="ScrumApp\clientService.js" />
+    <Content Include="ScrumApp\component\client\service\clientService.js" />
     <Content Include="ScrumApp\component\home\controller\homeController.js" />
     <Content Include="ScrumApp\component\home\service\homeService.js" />
     <Content Include="ScrumApp\component\room\controller\roomController.js" />
     <Content Include="ScrumApp\component\room\service\roomService.js" />
     <Content Include="ScrumApp\component\common\service\storageService.js" />
-    <Content Include="ScrumApp\votingController.js" />
-    <Content Include="ScrumApp\votingService.js" />
+    <Content Include="ScrumApp\component\client\controller\votingController.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -294,7 +290,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Vote\Models\" />
+    <Folder Include="Areas\Client\Models\" />
+    <Folder Include="Areas\Home\Models\" />
+    <Folder Include="Areas\Room\Models\" />
     <Folder Include="Infrasturcture\" />
     <Folder Include="Services\" />
   </ItemGroup>

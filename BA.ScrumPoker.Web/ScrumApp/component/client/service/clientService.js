@@ -19,9 +19,9 @@
             return $http.post('./api/client/vote', data);
         }
 
-        function getClient(clientId) {
-
-            return $http.get('./api/client/' + clientId);
+        function getClient(roomId, clientId) {
+            console.log(clientId);
+            return $http.get('./api/client/' + roomId + '/' + clientId);
         }
     }
 })();

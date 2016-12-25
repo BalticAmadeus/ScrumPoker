@@ -1,57 +1,63 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
-using BA.ScrumPoker.Areas.Room.Models;
 using BA.ScrumPoker.MemoryData;
 using System.Linq;
+using BA.ScrumPoker.Models;
 
 namespace BA.ScrumPoker.Areas.Room.Controllers
 {
 	public class RoomApiController : ApiController
 	{
-		[HttpPost]
-		[Route("api/Room/Kick")]
-		public IHttpActionResult Kick(KickModel model)
-		{
-			var kicked = Rooms.Instance.Kick(model.RoomId, model.ClientId);
-
-			if (kicked)
-			{
-				return Ok();
-			}
-
-			return BadRequest();
-		}
 
 		[HttpGet]
-		[Route("api/Room/{roomId}")]
-		public IHttpActionResult Room(string roomId)
+		[Route("api/Room/{roomId}/{secretKey}")]
+		public IHttpActionResult Room(string roomId, string secretKey)
 		{
-			var room = Rooms.Instance.GetRoom(roomId);
+			var room = RoomsTheBetterOne.Instance.GetRoom(roomId, secretKey);
 
 			if (room == null)
 			{
 				return NotFound();
 			}
 
-			var voters = room.Clients?.Select(item => new VoteModel
+			var clients = new List<ClientModel>();
+
+			foreach (var item in room.Clients.ToList())
 			{
-				Id = item.Id,
-				Name = item.Name,
-				VoteValue = item.VoteValue
-			}).ToList();
+				clients.Add(new ClientModel
+				{
+					RoomId = item.RoomId,
+					ClientId = item.ClientId,
+					VoteValue = item.VoteValue,
+					Name = item.Name
+				});
+			}
 
 			double? avgScore = null;
 
-			if (voters != null && voters.Any())
+			if (clients.Any())
 			{
-				avgScore = voters.Where(x => x.VoteValue.HasValue).Average(x => x.VoteValue.Value);
+				if (clients.Count() == 1)
+				{
+					avgScore = clients.First().VoteValue;
+				}
+				else
+				{
+					var clientsWithValue = clients.Where(x => x.VoteValue.HasValue).ToList();
+
+					if (clientsWithValue.Any())
+					{
+						avgScore = clientsWithValue.Average(x => x.VoteValue.Value);
+					}
+				}
 			}
 
 			var roomModel = new RoomItemModel // todo move to model -> convert method
 			{
 				CanVote = room.CanVote,
 				AvgScore = avgScore,
-				Voters = voters
+				Clients = clients
 			};
 
 			return Ok(roomModel);
@@ -61,9 +67,29 @@ namespace BA.ScrumPoker.Areas.Room.Controllers
 		[Route("api/room/stopVoting")]
 		public IHttpActionResult StopVoting(RoomModel model)
 		{
+			return StartStopVoting(model, false);
+		}
+
+		[HttpPost]
+		[Route("api/room/startVoting")]
+		public IHttpActionResult StartVoting(RoomModel model)
+		{
+			return StartStopVoting(model, true);
+		}
+
+		private IHttpActionResult StartStopVoting(RoomModel model, bool start)
+		{
 			try
 			{
-				Rooms.Instance.StopVoting(model.RoomId);
+				if (start)
+				{
+					RoomsTheBetterOne.Instance.StartVoting(model.RoomId, model.SecretKey);
+				}
+				else
+				{
+					RoomsTheBetterOne.Instance.StopVoting(model.RoomId, model.SecretKey);
+				}
+
 				return Ok();
 			}
 			catch (Exception ex)
@@ -73,18 +99,18 @@ namespace BA.ScrumPoker.Areas.Room.Controllers
 		}
 
 		[HttpPost]
-		[Route("api/room/startVoting")]
-		public IHttpActionResult StartVoting(RoomModel model)
+		[Route("api/Room/Kick")]
+		public IHttpActionResult Kick(KickClientModel model)
 		{
-			try
+			var kicked = RoomsTheBetterOne.Instance.Kick(model.RoomId, model.SecretKey, model.ClientId);
+
+			if (kicked)
 			{
-				Rooms.Instance.StartVoting(model.RoomId);
 				return Ok();
 			}
-			catch (Exception ex)
-			{
-				return BadRequest();
-			}
+
+			return BadRequest();
 		}
+
 	}
 }

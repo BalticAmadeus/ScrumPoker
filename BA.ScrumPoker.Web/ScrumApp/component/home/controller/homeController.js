@@ -42,11 +42,11 @@
 
             function success(response) {
 
-                var roomId = response.data;
+                var room = response.data;
 
-                storageService.saveRoom(roomId);
+                storageService.saveRoom(room.RoomId, room.SecretKey);
 
-                $window.location.href = baseUrl + 'Room/Index/' + roomId;
+                $window.location.href = baseUrl + 'Room/Index/' + room.RoomId;
             }
 
             function error() {

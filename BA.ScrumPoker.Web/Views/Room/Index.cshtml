@@ -12,27 +12,27 @@
             <div class="page-header">
 
                 <h1 class="room-number" ng-cloak>Room ID: {{roomCtrl.roomId}}</h1>
-                <h2 class="room-number" ng-cloak>Avg score: {{roomCtrl.model.avgScore}}</h2>
+                <h2 class="room-number" ng-cloak>Avg score: {{roomCtrl.isFlipped && roomCtrl.model.avgScore !== null ? roomCtrl.model.avgScore : '?'}}</h2>
                 <div class="qr-button-container">
                     <button class="btn btn-primary btn-lg show-qr-button" ng-click="roomCtrl.showHideQr()" ng-cloak>{{roomCtrl.showQr ? 'Hide QR Code' : 'Show QR Code'}}</button>
                 </div>
 
             </div>
-            <div class="container ng-hide" ng-show="roomCtrl.Votes">
+            <div class="container ng-hide" ng-show="roomCtrl.model.clients">
                 <div class="text-centered">
                 </div>
 
                 <div class="row" ng-show="!roomCtrl.showQr">
-                    <div class="client-entry" ng-repeat="voter in roomCtrl.model.voters">
+                    <div class="client-entry" ng-repeat="client in roomCtrl.model.clients">
 
-                        <div class="client-header" ng-class="{'voted':voter.VoteValue}">
-                            {{voter.Name}}
-                            <button class="btn btn-primary" ng-click="roomCtrl.kickClient(voter.ClientId)">Kick</button>
+                        <div class="client-header" ng-class="{'voted':client.VoteValue}">
+                            {{client.Name}}
+                            <button class="btn btn-primary" ng-click="roomCtrl.kickClient(client.ClientId)">Kick</button>
                         </div>
                         <div class="vote-container" ng-click="roomCtrl.flipMe(!roomCtrl.isFlipped)">
                             <div class="vote-card" ng-show="roomCtrl.isFlipped">
                                 <div class="card-face">
-                                    {{voter.VoteValue}}
+                                    {{client.VoteValue}}
                                 </div>
                             </div>
                             <div class="vote-card" ng-show="!roomCtrl.isFlipped">

@@ -1,6 +1,6 @@
-﻿namespace BA.ScrumPoker.Areas.Client.Models
+﻿namespace BA.ScrumPoker.Models
 {
-	public class ClientItemModel
+	public class VoteItemModel
 	{
 		public int Number { get; set; }
 		public bool Selected { get; set; }
