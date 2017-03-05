@@ -22,7 +22,8 @@ namespace BA.ScrumPoker
 					"~/Scripts/angular.min.js",
 					"~/Scripts/angular-qrcode.min.js",
 					"~/Scripts/loading-bar.js",
-					"~/Scripts/ngStorage.min.js"));
+					"~/Scripts/ngStorage.min.js",
+                    "~/Scripts/angular-cookies.min.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/app").IncludeDirectory(
 					"~/ScrumApp", "*.js", true));

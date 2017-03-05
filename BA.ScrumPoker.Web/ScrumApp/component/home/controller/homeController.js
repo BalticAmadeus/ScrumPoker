@@ -4,9 +4,9 @@
         .module('scrumPoker')
         .controller('homeController', homeController);
 
-    homeController.$inject = ['$localStorage', '$window', 'BaseUrl', 'homeService', 'storageService'];
+    homeController.$inject = ['$localStorage', '$window', '$cookies', 'BaseUrl', 'RoomId', 'homeService', 'storageService'];
 
-    function homeController($localStorage, $window, baseUrl, homeService, storageService) {
+    function homeController($localStorage, $window, $cookies, baseUrl, roomId, homeService, storageService) {
 
         //homeService.clear(); todo uncoment later
 
@@ -15,26 +15,41 @@
         ctrl.joinRoomErrorMsg = '';
         ctrl.createRoomErrorMsg = '';
 
+        ctrl.joinRoomModel = {
+            username: storageService.getUsername(),
+            roomId: roomId
+        };
+
         ctrl.joinRoom = joinRoom;
         ctrl.createRoom = createRoom;
 
+        autoJoinRoom();
+
         function joinRoom(model) {
+
+            storageService.saveUsername(model.username);
 
             homeService.joinRoom(model).then(success, error);
 
             function success(response) {
 
                 var client = response.data;
-
                 storageService.saveClient(client.RoomId, client.ClientId);
 
                 $window.location.href = baseUrl + 'Voting/Index/' + client.ClientId;
             }
 
-            function error() {
-                ctrl.joinRoomErrorMsg = 'room not found';
+            function error(response) {
+
+                if (response.status === 404) {
+                    ctrl.joinRoomErrorMsg = 'room not found';
+                } else {
+                    ctrl.joinRoomErrorMsg = 'Upps... 400 error';
+                }
+
             }
         }
+
 
         function createRoom() {
 
@@ -42,11 +57,9 @@
 
             function success(response) {
 
-                var room = response.data;
+                storageService.saveRoom(response.data.RoomId, response.data.SecretKey);
 
-                storageService.saveRoom(room.RoomId, room.SecretKey);
-
-                $window.location.href = baseUrl + 'Room/Index/' + room.RoomId;
+                $window.location.href = baseUrl + 'Room/Index/' + response.data.RoomId;
             }
 
             function error() {
@@ -54,6 +67,16 @@
             }
         }
 
+        function autoJoinRoom() {
+
+            var username = storageService.getUsername();
+
+            if (username === '' || roomId === '') {
+                return;
+            }
+
+            joinRoom({ username: username, roomId: roomId });
+        }
     }
 
 })();

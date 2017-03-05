@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.SignalR;
-using BA.ScrumPoker.Models;
+﻿using BA.ScrumPoker.Areas.Room.Models;
+using Microsoft.AspNet.SignalR;
 
 namespace BA.ScrumPoker.SignalR
 {

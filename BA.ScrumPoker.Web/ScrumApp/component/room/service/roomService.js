@@ -8,35 +8,33 @@
 
     function roomService($http) {
 
-        var service = {
+        return {
             getRoomInfo: getRoomInfo,
             startVoting: startVoting,
             stopVoting: stopVoting,
             kickClient: kickClient
         }
 
-        return service;
-
         function getRoomInfo(roomId, secretKey) {
 
-            return $http.get('./api/room/' + roomId + '/' + secretKey);
+            return $http.get('./api/room/?roomId=' + roomId + '&secretKey=' + secretKey);
         }
 
         function kickClient(roomId, clientId, secretKey) {
 
             var requestModel = { RoomId: roomId, ClientId: clientId, SecretKey: secretKey };
 
-            return $http.post('./api/room/kick', requestModel);
+            return $http.post('./api/kick', requestModel);
         }
 
         function startVoting(roomId, secretKey) {
 
-            return $http.post('./api/room/startVoting', { RoomId: roomId, SecretKey: secretKey });
+            return $http.put('./api/room', { RoomId: roomId, SecretKey: secretKey, Voting: true });
         }
 
         function stopVoting(roomId, secretKey) {
 
-            return $http.post('./api/room/stopVoting', { RoomId: roomId, SecretKey: secretKey });
+            return $http.put('./api/room', { RoomId: roomId, SecretKey: secretKey, Voting: false });
         }
     }
 

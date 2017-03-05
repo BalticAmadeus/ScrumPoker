@@ -1,116 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Http;
-using BA.ScrumPoker.MemoryData;
 using System.Linq;
-using BA.ScrumPoker.Models;
+using System.Web.Http;
+using BA.ScrumPoker.Areas.Room.Models;
+using BA.ScrumPoker.MemoryData;
 
 namespace BA.ScrumPoker.Areas.Room.Controllers
 {
-	public class RoomApiController : ApiController
-	{
+    public class RoomApiController : ApiController
+    {
 
-		[HttpGet]
-		[Route("api/Room/{roomId}/{secretKey}")]
-		public IHttpActionResult Room(string roomId, string secretKey)
-		{
-			var room = RoomsTheBetterOne.Instance.GetRoom(roomId, secretKey);
+        private readonly IRoom _room = Rooms.Instance;
 
-			if (room == null)
-			{
-				return NotFound();
-			}
+        [HttpGet]
+        [Route("api/Room")]
+        public IHttpActionResult GetRoom(string roomId, string secretKey)
+        {
+            var room = _room.Get(roomId, secretKey);
 
-			var clients = new List<ClientModel>();
+            if (room == null)
+            {
+                return NotFound();
+            }
 
-			foreach (var item in room.Clients.ToList())
-			{
-				clients.Add(new ClientModel
-				{
-					RoomId = item.RoomId,
-					ClientId = item.ClientId,
-					VoteValue = item.VoteValue,
-					Name = item.Name
-				});
-			}
+            var clients = RoomClientModel.Convert(room.Clients);
 
-			double? avgScore = null;
+            return Ok(RoomModel.Convert(room.CanVote, GetAvgScore(clients), clients));
+        }
 
-			if (clients.Any())
-			{
-				if (clients.Count() == 1)
-				{
-					avgScore = clients.First().VoteValue;
-				}
-				else
-				{
-					var clientsWithValue = clients.Where(x => x.VoteValue.HasValue).ToList();
+        [HttpPut]
+        [Route("api/Room")]
+        public IHttpActionResult UpdateRoom(RoomModel model)
+        {
+            try
+            {
+                if (model.Voting)
+                {
+                    Rooms.Instance.StartVoting(model.RoomId, model.SecretKey);
+                }
+                else
+                {
+                    Rooms.Instance.StopVoting(model.RoomId, model.SecretKey);
+                }
 
-					if (clientsWithValue.Any())
-					{
-						avgScore = clientsWithValue.Average(x => x.VoteValue.Value);
-					}
-				}
-			}
+                return Ok(RoomModel.Convert(_room.Get(model.RoomId, model.SecretKey)));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
 
-			var roomModel = new RoomItemModel // todo move to model -> convert method
-			{
-				CanVote = room.CanVote,
-				AvgScore = avgScore,
-				Clients = clients
-			};
+        [HttpPost]
+        [Route("api/Room")]
+        public IHttpActionResult CreateRoom()
+        {
+            try
+            {
+                var room = _room.Create();
 
-			return Ok(roomModel);
-		}
+                if (room == null)
+                {
+                    return BadRequest();
+                }
 
-		[HttpPost]
-		[Route("api/room/stopVoting")]
-		public IHttpActionResult StopVoting(RoomModel model)
-		{
-			return StartStopVoting(model, false);
-		}
+                return Ok(RoomModel.Convert(room));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
 
-		[HttpPost]
-		[Route("api/room/startVoting")]
-		public IHttpActionResult StartVoting(RoomModel model)
-		{
-			return StartStopVoting(model, true);
-		}
+        private double? GetAvgScore(List<RoomClientModel> clients)
+        {
 
-		private IHttpActionResult StartStopVoting(RoomModel model, bool start)
-		{
-			try
-			{
-				if (start)
-				{
-					RoomsTheBetterOne.Instance.StartVoting(model.RoomId, model.SecretKey);
-				}
-				else
-				{
-					RoomsTheBetterOne.Instance.StopVoting(model.RoomId, model.SecretKey);
-				}
+            double? avgScore = null;
 
-				return Ok();
-			}
-			catch (Exception ex)
-			{
-				return BadRequest();
-			}
-		}
+            if (!clients.Any())
+            {
+                return avgScore;
+            }
 
-		[HttpPost]
-		[Route("api/Room/Kick")]
-		public IHttpActionResult Kick(KickClientModel model)
-		{
-			var kicked = RoomsTheBetterOne.Instance.Kick(model.RoomId, model.SecretKey, model.ClientId);
+            if (clients.Count() == 1)
+            {
+                avgScore = clients.First().VoteValue;
+            }
+            else
+            {
+                var clientsWithValue = clients.Where(x => x.VoteValue.HasValue).ToList();
 
-			if (kicked)
-			{
-				return Ok();
-			}
+                if (clientsWithValue.Any())
+                {
+                    avgScore = clientsWithValue.Average(x => x.VoteValue.Value);
+                }
+            }
 
-			return BadRequest();
-		}
+            return avgScore;
+        }
 
-	}
+    }
 }

@@ -1,4 +1,12 @@
-﻿<div id="voting-view" ng-controller="votingController as votingCtrl">
+﻿@section scripts
+{
+    <script>
+        scrumPoker.value('ClientId', '@ViewBag.ClientId'); // todo remove later
+    </script>
+}
+
+
+<div id="voting-view" ng-controller="votingController as votingCtrl">
     <div class="page-header">
         <h1 class="room-number">Room number: {{votingCtrl.roomId}}</h1>
     </div>

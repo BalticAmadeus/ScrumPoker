@@ -16,12 +16,11 @@
         return service;
 
         function vote(data) {
-            return $http.post('./api/client/vote', data);
+            return $http.put('./api/client', data);
         }
 
         function getClient(roomId, clientId) {
-            console.log(clientId);
-            return $http.get('./api/client/' + roomId + '/' + clientId);
+            return $http.get('./api/client?roomId=' + roomId + '&clientId=' + clientId);
         }
     }
 })();

@@ -7,6 +7,8 @@ namespace BA.ScrumPoker.Controllers
 		// GET: Voting
 		public ActionResult Index(int id) // todo remove later
 		{
+            ViewBag.ClientId = id;
+
             return View();
 		}
 	}

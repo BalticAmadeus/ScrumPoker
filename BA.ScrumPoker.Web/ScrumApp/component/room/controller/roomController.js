@@ -11,7 +11,7 @@
         var room = storageService.getRoom();
 
         var roomId = room.roomId;
-        var secretKey = room.secretKey; // todo implement this stuff
+        var secretKey = room.secretKey;
 
         var ctrl = this;
 
@@ -35,7 +35,8 @@
             ctrl.showQr = !ctrl.showQr;
         }
 
-        loadRoomInfo(roomId, secretKey);
+        loadRoomInfo();
+        loadRoomInfoLoop();
 
         function onbeforeunload(event) {
 
@@ -45,20 +46,26 @@
             return message;
         }
 
-        function loadRoomInfo(roomId, secretKey) {
+        function loadRoomInfoLoop() {
 
             setTimeout(function () {
 
-                function success(response) {
+                loadRoomInfo();
 
-                    ctrl.model.avgScore = response.data.AvgScore;
-                    ctrl.model.clients = response.data.Clients;
+                loadRoomInfoLoop();
 
-                    loadRoomInfo(roomId, secretKey);
-                }
-
-                roomService.getRoomInfo(roomId, secretKey).then(success, error);
             }, 2000);
+        }
+
+        function loadRoomInfo() {
+
+            function success(response) {
+
+                ctrl.model.avgScore = response.data.AvgScore;
+                ctrl.model.clients = response.data.Clients;
+            }
+
+            roomService.getRoomInfo(roomId, secretKey).then(success);
         }
 
         function flipMe(varl) {
@@ -70,37 +77,31 @@
             } else {
                 startVoting();
             }
+
+            loadRoomInfo();
         }
 
         function kickClient(clientId) {
 
-            roomService.kickClient(roomId, clientId, secretKey).then(success, error);
-
-            function success(response) {
-                // todo
-            }
+            roomService.kickClient(roomId, clientId, secretKey).then(commonSuccess, commonError);
         }
 
         function startVoting() {
 
-            roomService.startVoting(roomId, secretKey).then(success, error);
-
-            function success(response) {
-                // todo
-            }
+            roomService.startVoting(roomId, secretKey).then(commonSuccess, commonError);
         }
 
         function stopVoting() {
 
-            roomService.stopVoting(roomId, secretKey).then(success, error);
-
-            function success(response) {
-                // todo
-            }
+            roomService.stopVoting(roomId, secretKey).then(commonSuccess, commonError);
         }
 
-        function error(response) {
-            console.log(response);
+        function commonSuccess() {
+            loadRoomInfo();
+        }
+
+        function commonError() {
+            loadRoomInfo();
         }
     }
 })();

@@ -19,14 +19,14 @@
 
             var requestModel = {
                 RoomId: model.roomId,
-                Username: model.username
+                Name: model.username
             };
 
-            return $http.put('./api/home/joinRoom', requestModel);
+            return $http.post('./api/client', requestModel);
         }
 
         function createRoom() {
-            return $http.post('./api/home/createRoom');
+            return $http.post('./api/room');
         }
     }
 

@@ -4,9 +4,9 @@
         .module('scrumPoker')
         .factory('storageService', storageService);
 
-    storageService.$inject = ['$localStorage'];
+    storageService.$inject = ['$localStorage', '$cookies'];
 
-    function storageService($localStorage) {
+    function storageService($localStorage, $cookies) {
 
         var service = {
             getRoom: getRoom,
@@ -15,7 +15,10 @@
             saveClient: saveClient,
             getClient: getClient,
 
-            clear: clear
+            clear: clear,
+
+            getUsername: getUsername,
+            saveUsername: saveUsername
         };
 
         return service;
@@ -55,6 +58,21 @@
             };
 
             return room;
+        }
+
+        function getUsername() {
+
+            var username = $cookies.get('username');
+
+            if (typeof username !== 'undefined') {
+                return username;
+            }
+
+            return '';
+        }
+
+        function saveUsername(username) {
+            $cookies.put('username', username);
         }
     }
 })();

@@ -11,6 +11,8 @@ namespace BA.ScrumPoker.Controllers
 				Request.Url.Authority + 
 				Request.ApplicationPath.TrimEnd('/') + "/";
 
+		    ViewBag.RoomId = Request.Params["roomId"];
+
 			return View();
 		}
 	}

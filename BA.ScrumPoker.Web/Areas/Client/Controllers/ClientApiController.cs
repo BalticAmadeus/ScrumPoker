@@ -1,76 +1,95 @@
-﻿using BA.ScrumPoker.MemoryData;
-using System.Collections.Generic;
+﻿using System;
 using System.Web.Http;
-using BA.ScrumPoker.Models;
+using BA.ScrumPoker.MemoryData;
+using System.Collections.Generic;
+using System.Linq;
+using BA.ScrumPoker.Areas.Client.Models;
 
 namespace BA.ScrumPoker.Areas.Client.Controllers
 {
-	public class ClientApiController : ApiController
-	{
+    public class ClientApiController : ApiController
+    {
+        private readonly IClient _client = Rooms.Instance;
+        private readonly IRoom _room = Rooms.Instance;
 
-		[HttpPost]
-		[Route("api/client/vote")]
-		public IHttpActionResult Client(ClientModel model)
-		{
-			var canVote = RoomsTheBetterOne.Instance.CanVote(model.RoomId);
+        [HttpPost]
+        [Route("api/Client")]
+        public IHttpActionResult JoinRoom(ClientModel model)
+        {
+            try
+            {
+                var client = _client.Join(model.Name, model.RoomId);
 
-			if (!canVote)
-			{
-				return Ok(); // todo return client data
-			}
+                if (client == null)
+                {
+                    return NotFound();
+                }
 
-			if (!model.VoteValue.HasValue)
-			{
-				return BadRequest();
-			}
+                model = ClientModel.Convert(client);
 
-			var client = RoomsTheBetterOne.Instance.Vote(model.RoomId, model.ClientId, model.VoteValue.Value);
+                model.CanVote = _room.CanVote(model.RoomId);
 
-			if (client == null)
-			{
-				return BadRequest();
-			}
+                return Ok(model);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
 
-			return Ok();
-		}
+        [HttpPut]
+        [Route("api/Client")]
+        public IHttpActionResult UpdateClient(ClientModel model)
+        {
+            if (model.VoteValue == null)
+            {
 
-		[HttpGet]
-		[Route("api/client/{roomId}/{clientId}")]
-		public IHttpActionResult Client(string roomId, int clientId)
-		{
-			var client = RoomsTheBetterOne.Instance.GetClient(roomId, clientId);
+                return BadRequest();
+            }
 
-			if (client == null)
-			{
-				return BadRequest();
-			}
+            if (_room.CanVote(model.RoomId))
+            {
+                _client.Vote(model.RoomId, model.ClientId, model.VoteValue.Value);
+            }
 
-			var canVote = RoomsTheBetterOne.Instance.CanVote(client.RoomId);
+            return Ok();
+        }
 
-			var clientItemModel = new List<VoteItemModel>();
+        [HttpGet]
+        [Route("api/Client")]
+        public IHttpActionResult GetClient(string roomId, int clientId)
+        {
+            var client = _client.Get(roomId, clientId);
 
-			foreach (var item in GetFibonacci())
-			{
-				clientItemModel.Add(new VoteItemModel
-				{
-					Number = item,
-					Selected = client.Voted && client.VoteValue.HasValue && client.VoteValue.Value == item
-				});
-			}
+            if (client == null)
+            {
+                return BadRequest();
+            }
 
-			var clientModel = new VoteModel
-			{
-				CanVote = canVote,
-				Items = clientItemModel,
-			};
+            var clientModel = ClientModel.Convert(client);
 
-			return Ok(clientModel);
-		}
+            clientModel.CanVote = Rooms.Instance.CanVote(client.RoomId);
+            clientModel.VoteOptions = GetVoteOptions(client);
 
-		private List<int> GetFibonacci()
-		{
-			return new List<int>() { 0, 1, 2, 3, 5, 8, 13, 21, 34 };
-		}
+            return Ok(clientModel);
+        }
 
-	}
+        #region private methods
+
+        private List<ClientVoteOptionModel> GetVoteOptions(Entities.Client client)
+        {
+            return GetFibonacci().Select(item => new ClientVoteOptionModel
+            {
+                Number = item,
+                Selected = client.Voted && client.VoteValue.HasValue && client.VoteValue.Value == item
+            }).ToList();
+        }
+
+        private List<int> GetFibonacci()
+        {
+            return new List<int>() { 0, 1, 2, 3, 5, 8, 13, 21, 34 };
+        }
+
+        #endregion
+    }
 }

@@ -12,7 +12,11 @@
             <div class="page-header">
 
                 <h1 class="room-number" ng-cloak>Room ID: {{roomCtrl.roomId}}</h1>
-                <h2 class="room-number" ng-cloak>Avg score: {{roomCtrl.isFlipped && roomCtrl.model.avgScore !== null ? roomCtrl.model.avgScore : '?'}}</h2>
+                <h2 class="room-number" ng-cloak>
+                    Avg score:
+                    <span ng-show="roomCtrl.isFlipped && roomCtrl.model.avgScore !== null">{{roomCtrl.model.avgScore | number : 2}}</span>
+                    <span ng-show="roomCtrl.isFlipped === false || roomCtrl.model.avgScore === null">?</span>
+                </h2>
                 <div class="qr-button-container">
                     <button class="btn btn-primary btn-lg show-qr-button" ng-click="roomCtrl.showHideQr()" ng-cloak>{{roomCtrl.showQr ? 'Hide QR Code' : 'Show QR Code'}}</button>
                 </div>
@@ -25,7 +29,7 @@
                 <div class="row" ng-show="!roomCtrl.showQr">
                     <div class="client-entry" ng-repeat="client in roomCtrl.model.clients">
 
-                        <div class="client-header" ng-class="{'voted':client.VoteValue}">
+                        <div class="client-header" ng-class="{'voted':client.Voted}">
                             {{client.Name}}
                             <button class="btn btn-primary" ng-click="roomCtrl.kickClient(client.ClientId)">Kick</button>
                         </div>
