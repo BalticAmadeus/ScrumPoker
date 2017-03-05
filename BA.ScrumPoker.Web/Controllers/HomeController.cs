@@ -1,5 +1,4 @@
 ﻿using BA.ScrumPoker.MemoryData;
-using BA.ScrumPoker.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +10,11 @@ using IO = System.IO;
 
 namespace BA.ScrumPoker.Controllers
 {
-	public class HomeController : Controller
-	{
+    public class HomeController : Controller
+    {
         public const string OfficialVersion = "1";
 
-        public static string VersionString { get { return _versionString;  } }
+        public static string VersionString { get { return _versionString; } }
         private static string _versionString = GetVersionString();
 
         private static string GetVersionString()
@@ -44,38 +43,15 @@ namespace BA.ScrumPoker.Controllers
             {
                 // Best effort
             }
+
             return s.ToString();
         }
 
-		public ActionResult Index(string roomId)
-		{
+        public ActionResult Index(string roomId)
+        {
             ViewBag.RoomId = roomId;
             ViewBag.VersionString = VersionString;
             return View();
-		}
-
-		public ActionResult CreateRoom()
-		{
-            var room = Rooms.Instance.CreateRoom();
-
-            if (room == null)
-            {
-                ModelState.AddModelError("Error", "Failed to create the room");
-            }
-
-            return RedirectToActionPermanent("Index", "Room", new { id = room.RoomId });
-		}
-
-		public ActionResult Join(string userName, string roomId)
-		{
-            var client = Rooms.Instance.JoinRoom(userName, roomId);
-
-			if (client == null)
-			{
-				ModelState.AddModelError("Error", "Failed to join the room");
-			}
-
-			return RedirectToActionPermanent("Index", "Voting", new { id = client.Id });
-		}
-	}
+        }
+    }
 }
