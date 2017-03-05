@@ -102,6 +102,13 @@ textarea {
     color: white;
 }
 
+.app-version {
+    text-align: center;
+    margin-top: 20px;
+    color: #324770;
+    font-size: 10px;
+}
+
 @media only screen and (min-width: 768px) {
     .join-room {
         position: absolute;
