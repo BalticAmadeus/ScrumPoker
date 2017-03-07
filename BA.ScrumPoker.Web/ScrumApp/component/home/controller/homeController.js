@@ -8,8 +8,6 @@
 
     function homeController($localStorage, $window, $cookies, baseUrl, roomId, homeService, storageService) {
 
-        //homeService.clear(); todo uncoment later
-
         var ctrl = this;
 
         ctrl.joinRoomErrorMsg = '';
