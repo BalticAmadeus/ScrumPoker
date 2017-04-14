@@ -12,7 +12,7 @@ namespace BA.ScrumPoker.Controllers
 {
     public class HomeController : Controller
     {
-        public const string OfficialVersion = "1";
+        public const string OfficialVersion = "2";
 
         public static string VersionString { get { return _versionString; } }
         private static string _versionString = GetVersionString();
