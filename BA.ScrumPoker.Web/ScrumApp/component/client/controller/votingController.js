@@ -49,7 +49,7 @@
 
             function error() {
 
-                alert('Dude... you was kicked or something...');
+                alert('Dude... you were kicked or something...');
 
                 isKicked = true;
 
